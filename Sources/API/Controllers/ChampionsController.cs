@@ -6,35 +6,35 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChampionController : ControllerBase
+    public class ChampionsController : ControllerBase
     {
-        // GET: api/<ChampionController>
+        // GET: api/<ChampionsController>
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<ChampionController>/5
+        // GET api/<ChampionsController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<ChampionController>
+        // POST api/<ChampionsController>
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/<ChampionController>/5
+        // PUT api/<ChampionsController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<ChampionController>/5
+        // DELETE api/<ChampionsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stub", "Stub", "{2C607793-B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StubLib", "StubLib\StubLib.csproj", "{B01D7EF2-2D64-409A-A29A-61FB7BB7A9DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{752995A0-650D-44D4-BB4C-514B984E14C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{D1C42BE5-5EAC-4D76-81C9-74AA5C84B629}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +39,10 @@ Global
 		{B01D7EF2-2D64-409A-A29A-61FB7BB7A9DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B01D7EF2-2D64-409A-A29A-61FB7BB7A9DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B01D7EF2-2D64-409A-A29A-61FB7BB7A9DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{752995A0-650D-44D4-BB4C-514B984E14C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{752995A0-650D-44D4-BB4C-514B984E14C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{752995A0-650D-44D4-BB4C-514B984E14C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{752995A0-650D-44D4-BB4C-514B984E14C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1C42BE5-5EAC-4D76-81C9-74AA5C84B629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1C42BE5-5EAC-4D76-81C9-74AA5C84B629}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1C42BE5-5EAC-4D76-81C9-74AA5C84B629}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1C42BE5-5EAC-4D76-81C9-74AA5C84B629}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
