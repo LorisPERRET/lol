@@ -16,6 +16,11 @@ namespace API.Mapper
             };
         }
 
+        public static IEnumerable<ChampionDto> ToDtos(this IEnumerable<Champion> champions)
+        {
+            return champions.Select(c => ToDto(c));
+        }
+
 
     }
 }

@@ -29,12 +29,7 @@ namespace API.Controllers
             {
                 return NoContent();
             }
-            IList<ChampionDto> championDtos= new List<ChampionDto>();
-            foreach (var champion in champ)
-            {
-                championDtos.Add(champion.ToDto());
-            }
-            return Ok(championDtos);
+            return Ok(champ.ToDtos());
         }
 
         // GET api/<ChampionsController>/5
@@ -46,12 +41,7 @@ namespace API.Controllers
             {
                 return NoContent();
             }
-            IList<ChampionDto> championDtos = new List<ChampionDto>();
-            foreach (var champion in champ)
-            {
-                championDtos.Add(champion.ToDto());
-            }
-            return Ok(championDtos);
+            return Ok(champ.ToDtos());
         }
 
         // POST api/<ChampionsController>
