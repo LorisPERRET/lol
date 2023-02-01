@@ -1,5 +1,5 @@
-﻿using API.Mapper;
-using DTO;
+﻿using DTO_API;
+using DTO_API.Mapper;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using StubLib;
