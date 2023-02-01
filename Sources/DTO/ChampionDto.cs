@@ -1,7 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Reflection.PortableExecutable;
-
-namespace DTO
+﻿
+namespace DTO_API
 {
     public class ChampionDto
     {

@@ -1,7 +1,6 @@
-﻿using DTO;
-using Model;
+﻿using Model;
 
-namespace API.Mapper
+namespace DTO_API.Mapper
 {
     public static class ChampionMapper
     {
@@ -20,7 +19,6 @@ namespace API.Mapper
         {
             return champions.Select(c => ToDto(c));
         }
-
 
     }
 }
