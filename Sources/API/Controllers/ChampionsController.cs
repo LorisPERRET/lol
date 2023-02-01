@@ -23,9 +23,9 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            
+
             IEnumerable<Champion> champ = await _dataManager.ChampionsMgr.GetItems(0, await _dataManager.ChampionsMgr.GetNbItems());
-            if(champ.Count() == 0)
+            if (champ.Count() == 0)
             {
                 return NoContent();
             }

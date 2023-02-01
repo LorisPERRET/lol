@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+// Manager choice
 builder.Services.AddSingleton<IDataManager, StubData>();
 
 
