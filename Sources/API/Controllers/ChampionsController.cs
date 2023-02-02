@@ -57,9 +57,21 @@ namespace API.Controllers
         }
 
         // DELETE api/<ChampionsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{nom}")]
+        public async Task<IActionResult> Delete(string nom)
         {
+            IEnumerable<Champion> champ = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0,
+                await _dataManager.ChampionsMgr.GetNbItemsByName(nom), null);
+            
+            bool res = await _dataManager.ChampionsMgr.DeleteItem(champ.FirstOrDefault());
+            if (res)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }
