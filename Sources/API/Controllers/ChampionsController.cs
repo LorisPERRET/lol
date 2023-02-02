@@ -46,14 +46,29 @@ namespace API.Controllers
 
         // POST api/<ChampionsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] ChampionDto champion)
         {
+            if(await _dataManager.ChampionsMgr.GetNbItemsByName(champion.Name) == 0)
+            {
+                await _dataManager.ChampionsMgr.AddItem(champion.ToChampion());
+                return CreatedAtAction(nameof(Get), champion.Name, champion);
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
+            
         }
 
         // PUT api/<ChampionsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{nom}")]
+        public async Task<IActionResult> Put(string nom, [FromBody] ChampionDto champion)
         {
+            var oldChampion = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0, await _dataManager.ChampionsMgr.GetNbItemsByName(nom));
+            await _dataManager.ChampionsMgr.UpdateItem(oldChampion.FirstOrDefault(),champion.ToChampion());
+            return Ok();
+            
         }
 
         // DELETE api/<ChampionsController>/5
