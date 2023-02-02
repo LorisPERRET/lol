@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EntityFramework\EntityFramework.csproj" />
+    <ProjectReference Include="..\DTO\DTO_API.csproj" />
   </ItemGroup>
 
 </Project>
