@@ -24,6 +24,12 @@ namespace TestAPI
         public async Task<ChampionDto> GetChampionByName(string nom) =>
             await _httpClient.GetFromJsonAsync<ChampionDto>($"/api/Champions/{nom}");
 
+        public async Task<HttpResponseMessage> PostChampion(ChampionDto champion) =>
+            await _httpClient.PostAsJsonAsync("/api/Champions", champion);
+
+        public async Task<HttpResponseMessage> PutChampion(ChampionDto champion) =>
+            await _httpClient.PutAsJsonAsync($"/api/Champions/{champion}", champion);
+
         public async Task<HttpResponseMessage> DeleteChampion(string nom) => 
             await _httpClient.DeleteAsync($"/api/Champions/{nom}");
     }
