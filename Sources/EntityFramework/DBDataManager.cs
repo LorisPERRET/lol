@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DTO_EF;
 using DTO_EF.Mapper;
+using Microsoft.EntityFrameworkCore;
 using Model;
 using Shared;
 
@@ -17,6 +18,7 @@ namespace EntityFramework
             using (var context = new SqlLiteDbContext())
             {
                 context.Champions.Add(item.ToEntity());
+                context.SaveChanges();
                 return Task.FromResult<Champion>(item);
             }
         }
@@ -26,6 +28,7 @@ namespace EntityFramework
             using (var context = new SqlLiteDbContext())
             {
                 var result = context.Champions.Remove(item.ToEntity());
+                context.SaveChanges();
                 return Task.FromResult<bool>(result != null);
             }
         }
@@ -42,12 +45,20 @@ namespace EntityFramework
 
         public Task<int> GetNbItems()
         {
-            throw new NotImplementedException();
+            using (var context = new SqlLiteDbContext())
+            {
+                var count = context.Champions.Count();
+                return Task.FromResult<int>(count);
+            }
         }
 
         public Task<int> GetNbItemsByName(string substring)
         {
-            throw new NotImplementedException();
+            using (var context = new SqlLiteDbContext())
+            {
+                var count = context.Champions.Count(item => item.Name == substring);
+                return Task.FromResult<int>(count);
+            }
         }
 
         public Task<Champion> UpdateItem(Champion oldItem, Champion newItem)
@@ -63,6 +74,7 @@ namespace EntityFramework
 
                 context.Champions.Remove(oldItem.ToEntity());
                 context.Champions.Add(newItem.ToEntity());
+                context.SaveChanges();
                 return Task.FromResult<Champion>(newItem);
             }
         }
