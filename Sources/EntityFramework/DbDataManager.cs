@@ -17,6 +17,7 @@ namespace EntityFramework
         {
             using (var context = new SqlLiteDbContext())
             {
+                context.Database.EnsureCreated();
                 context.Champions.Add(item.ToEntity());
                 context.SaveChanges();
                 return Task.FromResult<Champion>(item);
@@ -27,6 +28,7 @@ namespace EntityFramework
         {
             using (var context = new SqlLiteDbContext())
             {
+                context.Database.EnsureCreated();
                 var result = context.Champions.Remove(item.ToEntity());
                 context.SaveChanges();
                 return Task.FromResult<bool>(result != null);
@@ -47,6 +49,7 @@ namespace EntityFramework
         {
             using (var context = new SqlLiteDbContext())
             {
+                context.Database.EnsureCreated();
                 var count = context.Champions.Count();
                 return Task.FromResult<int>(count);
             }
@@ -56,6 +59,7 @@ namespace EntityFramework
         {
             using (var context = new SqlLiteDbContext())
             {
+                context.Database.EnsureCreated();
                 var count = context.Champions.Count(item => item.Name == substring);
                 return Task.FromResult<int>(count);
             }
@@ -65,6 +69,7 @@ namespace EntityFramework
         {
             using (var context = new SqlLiteDbContext())
             {
+                context.Database.EnsureCreated();
                 if (oldItem == null || newItem == null) return Task.FromResult<Champion>(default(Champion));
 
                 if (!context.Champions.Contains(oldItem.ToEntity()))
