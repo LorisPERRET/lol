@@ -26,12 +26,7 @@ namespace EntityFramework
             using (var context = new SqlLiteDbContext())
             {
                 var result = context.Champions.Remove(item.ToEntity());
-                if (result == null)
-                {
-                    return Task.FromResult<bool>(false);
-                }
-
-                return Task.FromResult<bool>(true);
+                return Task.FromResult<bool>(result != null);
             }
         }
 
@@ -57,7 +52,19 @@ namespace EntityFramework
 
         public Task<Champion> UpdateItem(Champion oldItem, Champion newItem)
         {
-            throw new NotImplementedException();
+            using (var context = new SqlLiteDbContext())
+            {
+                if (oldItem == null || newItem == null) return Task.FromResult<Champion>(default(Champion));
+
+                if (!context.Champions.Contains(oldItem.ToEntity()))
+                {
+                    return Task.FromResult<Champion>(default(Champion));
+                }
+
+                context.Champions.Remove(oldItem.ToEntity());
+                context.Champions.Add(newItem.ToEntity());
+                return Task.FromResult<Champion>(newItem);
+            }
         }
     }
 }
