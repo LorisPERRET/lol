@@ -22,5 +22,16 @@ namespace DTO_EF.Mapper
         }
 
 
+        public static Champion ToChampion(this ChampionEntity champion)
+        {
+            return new Champion(champion.Name, Enum.Parse<ChampionClass>(champion.Class), champion.Icon, "", champion.Bio);
+        }
+
+        public static IEnumerable<Champion> ToChampions(this IEnumerable<ChampionEntity> champions)
+        {
+            return champions.Select(c => ToChampion(c));
+        }
+
+
     }
 }
