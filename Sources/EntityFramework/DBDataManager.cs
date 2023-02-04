@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DTO_EF;
+﻿using DTO_EF;
 using DTO_EF.Mapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Model;
 using Shared;
 
@@ -47,7 +39,7 @@ namespace EntityFramework
 
         public Task<IEnumerable<Champion>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            using(var context = new SqlLiteDbContext())
+            using (var context = new SqlLiteDbContext())
             {
                 var temp = context.Champions.Where(c => c.Name == substring).Skip(index * count).Take(count);
                 temp = GetItemWithFilter(orderingPropertyName, descending, temp);
@@ -105,6 +97,5 @@ namespace EntityFramework
 
             return temp;
         }
-
     }
 }
