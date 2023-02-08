@@ -16,17 +16,13 @@ namespace EntityFramework
 
         public Task<Champion> AddItem(Champion item)
         {
-            _context.Database.EnsureCreated();
             _context.Champions.Add(item.ToEntity());
-            _context.SaveChanges();
             return Task.FromResult<Champion>(item);
         }
 
         public Task<bool> DeleteItem(Champion item)
         {
-            _context.Database.EnsureCreated();
             var result = _context.Champions.Remove(item.ToEntity());
-            _context.SaveChanges();
             return Task.FromResult<bool>(result != null);
         }
 
@@ -46,21 +42,18 @@ namespace EntityFramework
 
         public Task<int> GetNbItems()
         {
-            _context.Database.EnsureCreated();
             var count = _context.Champions.Count();
             return Task.FromResult<int>(count);
         }
 
         public Task<int> GetNbItemsByName(string substring)
         {
-            _context.Database.EnsureCreated();
             var count = _context.Champions.Count(item => item.Name == substring);
             return Task.FromResult<int>(count);
         }
 
         public Task<Champion> UpdateItem(Champion oldItem, Champion newItem)
         {
-            _context.Database.EnsureCreated();
             if (oldItem == null || newItem == null) return Task.FromResult<Champion>(default(Champion));
 
             if (!_context.Champions.Contains(oldItem.ToEntity()))
@@ -70,7 +63,6 @@ namespace EntityFramework
 
             _context.Champions.Remove(oldItem.ToEntity());
             _context.Champions.Add(newItem.ToEntity());
-            _context.SaveChanges();
             return Task.FromResult<Champion>(newItem);
         }
 
