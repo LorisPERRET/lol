@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFramework.Migrations
 {
     [DbContext(typeof(SqlLiteDbContext))]
-    [Migration("20230201135708_testMigration")]
+    [Migration("20230208125639_testMigration")]
     partial class testMigration
     {
         /// <inheritdoc />

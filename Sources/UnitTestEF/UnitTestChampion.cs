@@ -1,4 +1,9 @@
+using DTO_EF;
+using DTO_EF.Mapper;
 using EntityFramework;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Model;
 using StubLib;
 
 namespace UnitTestEF
@@ -7,9 +12,32 @@ namespace UnitTestEF
     public class UnitTestChampion
     {
         [TestMethod]
-        public void TestAddChampion()
+        public async Task TestAddChampionAsync()
         {
-            DbDataManager dbManager = new DbDataManager();
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            var options = new DbContextOptionsBuilder<SqlLiteDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
+
+            //Arange
+            Champion item = new Champion("Blabla", ChampionClass.Tank);
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                //Act
+                context.Champions.Add(item.ToEntity());
+                context.SaveChanges();
+
+                //Assert
+                Assert.AreEqual(context.Champions.Count(), 7 );
+                List<ChampionEntity>lesChampions = context.Champions.Where(c => c.Name == item.Name).ToList();
+                Assert.AreEqual(lesChampions.FirstOrDefault().Name, item.Name);
+
+
+            }
 
         }
 
