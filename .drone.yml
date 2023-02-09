@@ -61,5 +61,6 @@ steps:
           CONTAINERNAME: LolAPI
           COMMAND: create
           OVERWRITE: true
+          ADMINS: lorisperret,hugolivet
       depends_on: [docker-build-and-push-image]
 
