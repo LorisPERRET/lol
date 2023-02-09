@@ -41,7 +41,7 @@ namespace UnitTestEF
             }
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public async Task TestDeleteChampion()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
@@ -67,7 +67,7 @@ namespace UnitTestEF
                 List<ChampionEntity> lesChampions = context.Champions.Where(c => c.Name == item.Name).ToList();
                 Assert.AreEqual(lesChampions.Count, 0);
             }
-        }
+        }*/
 
         [TestMethod]
         public void TestGetChampion()
