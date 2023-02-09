@@ -7,7 +7,12 @@ namespace EntityFramework
 {
     public class DbDataManager : IGenericDataManager<Champion>
     {
+        
+        // VOIR UNIT OF WORK POUR QUE CE SOIT OK
+        
+        
         private SqlLiteDbContext _context;
+
 
         public DbDataManager(SqlLiteDbContext context)
         {

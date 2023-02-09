@@ -12,7 +12,37 @@ namespace UnitTestEF
     public class UnitTestChampion
     {
         [TestMethod]
-        public async Task TestAddChampionAsync()
+        public async Task TestAddChampion()
+        {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            var options = new DbContextOptionsBuilder<SqlLiteDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
+
+            //Arange
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                //Act
+                await context.Champions.AddAsync(item);
+                context.SaveChanges();
+            }
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                //Assert
+                Assert.AreEqual(context.Champions.Count(), 1);
+                List<ChampionEntity> lesChampions = context.Champions.Where(c => c.Name == item.Name).ToList();
+                Assert.AreEqual(lesChampions.FirstOrDefault().Name, item.Name);
+            }
+        }
+
+        /*[TestMethod]
+        public async Task TestDeleteChampion()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
@@ -26,25 +56,18 @@ namespace UnitTestEF
             using (var context = new SqlLiteDbContext(options))
             {
                 context.Database.EnsureCreated();
-
+                await context.Champions.AddAsync(item.ToEntity());
+                
                 //Act
-                context.Champions.Add(item.ToEntity());
+                context.Champions.Remove(item.ToEntity());
                 context.SaveChanges();
 
                 //Assert
-                Assert.AreEqual(context.Champions.Count(), 7 );
-                List<ChampionEntity>lesChampions = context.Champions.Where(c => c.Name == item.Name).ToList();
-                Assert.AreEqual(lesChampions.FirstOrDefault().Name, item.Name);
-
-
+                Assert.AreEqual(context.Champions.Count(), 6);
+                List<ChampionEntity> lesChampions = context.Champions.Where(c => c.Name == item.Name).ToList();
+                Assert.AreEqual(lesChampions.Count, 0);
             }
-
-        }
-
-        [TestMethod]
-        public void TestDeleteChampion()
-        {
-        }
+        }*/
 
         [TestMethod]
         public void TestGetChampion()

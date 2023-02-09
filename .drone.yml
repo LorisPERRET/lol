@@ -54,3 +54,13 @@ steps:
           from_secret: SECRET_REGISTRY_PASSWORD
       depends_on: [tests]
 
+    - name: deploy-container-API
+      image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+      environment:
+          IMAGENAME: hub.codefirst.iut.uca.fr/hugo.livet/lol:latest
+          CONTAINERNAME: LolAPI
+          COMMAND: create
+          OVERWRITE: true
+          ADMINS: lorisperret,hugolivet
+      depends_on: [docker-build-and-push-image]
+

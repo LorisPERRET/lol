@@ -10,7 +10,7 @@ namespace EntityFramework
     public class SqlLiteDbContext : DbContext
     {
 
-        public StubData _dataManager = new StubData();
+        
         public DbSet<ChampionEntity> Champions { get; set; }
 
         public SqlLiteDbContext() { }
@@ -27,15 +27,5 @@ namespace EntityFramework
             }
         }
 
-        protected async override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            IEnumerable<Champion> champ = await _dataManager.ChampionsMgr.GetItems(0,
-                await _dataManager.ChampionsMgr.GetNbItems());
-
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<ChampionEntity>().HasData(
-                champ.ToEntities()
-            );
-        }
     }
 }
