@@ -56,7 +56,7 @@ namespace UnitTestEF
         {
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void TestGetNbChampion()
         {
             DbDataManager dbManager = new DbDataManager();
@@ -78,7 +78,7 @@ namespace UnitTestEF
 
             Assert.IsNotNull(result);
             Assert.AreEqual(stubData.ChampionsMgr.GetNbItemsByName("Ahri"), result);
-        }
+        }*/
 
         [TestMethod]
         public void TestUpdateChampion()

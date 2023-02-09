@@ -31,7 +31,19 @@ namespace UnitTestAPI
         {
             StubData stub = new StubData();
             ChampionsController controller = new ChampionsController(stub);
-            
+
+            var result = await controller.Get("Ahri") as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+
+            var champions = result.Value as ChampionDto;
+
+            Assert.IsNotNull(champions);
+            var championStub =
+                await stub.ChampionsMgr.GetItemsByName("Ahri", 0, await stub.ChampionsMgr.GetNbItemsByName("Ahri"));
+            Assert.AreEqual(championStub.First(), champions);
+
         }
 
         [TestMethod]
