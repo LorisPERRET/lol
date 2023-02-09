@@ -66,8 +66,8 @@ namespace API.Controllers
         public async Task<IActionResult> Put(string nom, [FromBody] ChampionDto champion)
         {
             var oldChampion = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0, await _dataManager.ChampionsMgr.GetNbItemsByName(nom));
-            await _dataManager.ChampionsMgr.UpdateItem(oldChampion.FirstOrDefault(),champion.ToChampion());
-            return Ok();
+            var newChampion = await _dataManager.ChampionsMgr.UpdateItem(oldChampion.FirstOrDefault(),champion.ToChampion());
+            return Ok(newChampion.ToDto());
             
         }
 
@@ -83,10 +83,7 @@ namespace API.Controllers
             {
                 return Ok();
             }
-            else
-            {
-                return NotFound();
-            }
+            return NotFound();
         }
     }
 }
