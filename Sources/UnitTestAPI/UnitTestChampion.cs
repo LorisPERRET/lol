@@ -83,14 +83,25 @@ namespace UnitTestAPI
         {
             StubData stub = new StubData();
             ChampionsController controller = new ChampionsController(stub);
-            var championDepart = new Champion("Hugo", ChampionClass.Fighter).ToDto();
+            var championDepart = new Champion("Ahri", ChampionClass.Fighter).ToDto();
 
-            var result = await controller.Put("Arhi", championDepart) as OkObjectResult;
+            //OK
+            var result = await controller.Put("Ahri", championDepart) as OkObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(200, result.StatusCode);
 
+            var championArrive = result.Value as ChampionDto;
 
+            Assert.IsNotNull(championArrive);
+            Assert.AreEqual(championDepart.Name, championArrive.Name);
+
+            //NOT OK
+            var championDepart2 = new Champion("Hugo", ChampionClass.Fighter).ToDto();
+            var result2 = await controller.Put("Ahri", championDepart2) as BadRequestResult;
+
+            Assert.IsNotNull(result2);
+            Assert.AreEqual(400, result2.StatusCode);
 
         }
 

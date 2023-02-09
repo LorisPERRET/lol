@@ -65,6 +65,7 @@ namespace API.Controllers
         [HttpPut("{nom}")]
         public async Task<IActionResult> Put(string nom, [FromBody] ChampionDto champion)
         {
+            if (!nom.Equals(champion.Name)) return BadRequest();
             var oldChampion = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0, await _dataManager.ChampionsMgr.GetNbItemsByName(nom));
             var newChampion = await _dataManager.ChampionsMgr.UpdateItem(oldChampion.FirstOrDefault(),champion.ToChampion());
             return Ok(newChampion.ToDto());
