@@ -1,5 +1,6 @@
 using API.Controllers;
 using DTO_API;
+using DTO_API.Mapper;
 using Microsoft.AspNetCore.Mvc;
 using StubLib;
 
@@ -37,12 +38,12 @@ namespace UnitTestAPI
             Assert.IsNotNull(result);
             Assert.AreEqual(200, result.StatusCode);
 
-            var champions = result.Value as ChampionDto;
+            var champions = result.Value as IEnumerable<ChampionDto>;
 
             Assert.IsNotNull(champions);
             var championStub =
                 await stub.ChampionsMgr.GetItemsByName("Ahri", 0, await stub.ChampionsMgr.GetNbItemsByName("Ahri"));
-            Assert.AreEqual(championStub.First(), champions);
+            Assert.AreEqual(championStub.First().Name, champions.First().Name);
 
         }
 
