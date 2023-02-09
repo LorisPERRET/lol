@@ -40,4 +40,17 @@ steps:
         sonar_token:
           from_secret: SECRET_SONAR_LOGIN
       depends_on: [tests]
+    
+    - name: docker-build-and-push-image
+      image: plugins/docker
+      settings:
+        dockerfile: Sources/Dockerfile
+        context: Sources/
+        registry: hub.codefirst.iut.uca.fr
+        repo: hub.codefirst.iut.uca.fr/hugo.livet/lol
+        username:
+          from_secret: SECRET_REGISTRY_USERNAME
+        password:
+          from_secret: SECRET_REGISTRY_PASSWORD
+      depends_on: [tests]
 
