@@ -82,7 +82,7 @@ namespace API.Controllers
             bool res = await _dataManager.ChampionsMgr.DeleteItem(champ.FirstOrDefault());
             if (res)
             {
-                return Ok();
+                return Ok(nom);
             }
             return NotFound();
         }

@@ -110,7 +110,18 @@ namespace UnitTestAPI
         {
             StubData stub = new StubData();
             ChampionsController controller = new ChampionsController(stub);
-            
+
+            //OK
+            var result = await controller.Delete("Ahri") as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+
+            //NOT OK
+            var result2 = await controller.Delete("Hugo") as NotFoundResult;
+
+            Assert.IsNotNull(result2);
+            Assert.AreEqual(404, result2.StatusCode);
         }
     }
 }
