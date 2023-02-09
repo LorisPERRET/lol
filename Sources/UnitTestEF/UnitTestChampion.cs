@@ -78,8 +78,8 @@ namespace UnitTestEF
         public void TestGetChampionByName()
         {
         }
-/*
-        [TestMethod]
+
+        /*[TestMethod]
         public void TestGetNbChampion()
         {
             DbDataManager dbManager = new DbDataManager();

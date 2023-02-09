@@ -1,6 +1,8 @@
 using API.Controllers;
 using DTO_API;
+using DTO_API.Mapper;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 using StubLib;
 
 namespace UnitTestAPI
@@ -31,7 +33,26 @@ namespace UnitTestAPI
         {
             StubData stub = new StubData();
             ChampionsController controller = new ChampionsController(stub);
-            
+
+            // OK
+            var result = await controller.Get("Ahri") as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+
+            var champions = result.Value as IEnumerable<ChampionDto>;
+
+            Assert.IsNotNull(champions);
+            var championStub =
+                await stub.ChampionsMgr.GetItemsByName("Ahri", 0, await stub.ChampionsMgr.GetNbItemsByName("Ahri"));
+            Assert.AreEqual(championStub.First().Name, champions.First().Name);
+
+            // NOT OK
+            var result2 = await controller.Get("Hugo") as NoContentResult;
+
+            Assert.IsNotNull(result2);
+            Assert.AreEqual(204, result2.StatusCode);
+
         }
 
         [TestMethod]
@@ -39,7 +60,22 @@ namespace UnitTestAPI
         {
             StubData stub = new StubData();
             ChampionsController controller = new ChampionsController(stub);
-            
+            var championDepart = new Champion("Hugo", ChampionClass.Fighter).ToDto();
+
+            //OK
+            var result = await controller.Post(championDepart) as CreatedAtActionResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(201, result.StatusCode);
+
+            var championArrive = result.Value as ChampionDto;
+            Assert.AreEqual(championDepart.Name, championArrive.Name);
+
+            //NOT OK
+            var result2 = await controller.Post(championDepart) as BadRequestResult;
+
+            Assert.IsNotNull(result2);
+            Assert.AreEqual(400, result2.StatusCode);
         }
 
         [TestMethod]
@@ -47,7 +83,26 @@ namespace UnitTestAPI
         {
             StubData stub = new StubData();
             ChampionsController controller = new ChampionsController(stub);
-            
+            var championDepart = new Champion("Ahri", ChampionClass.Fighter).ToDto();
+
+            //OK
+            var result = await controller.Put("Ahri", championDepart) as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+
+            var championArrive = result.Value as ChampionDto;
+
+            Assert.IsNotNull(championArrive);
+            Assert.AreEqual(championDepart.Name, championArrive.Name);
+
+            //NOT OK
+            var championDepart2 = new Champion("Hugo", ChampionClass.Fighter).ToDto();
+            var result2 = await controller.Put("Ahri", championDepart2) as BadRequestResult;
+
+            Assert.IsNotNull(result2);
+            Assert.AreEqual(400, result2.StatusCode);
+
         }
 
         [TestMethod]
