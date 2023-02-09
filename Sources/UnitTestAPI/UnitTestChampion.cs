@@ -40,12 +40,12 @@ namespace UnitTestAPI
             Assert.IsNotNull(result);
             Assert.AreEqual(200, result.StatusCode);
 
-            var champions = result.Value as IEnumerable<ChampionDto>;
+            var champions = result.Value as ChampionDto;
 
             Assert.IsNotNull(champions);
             var championStub =
                 await stub.ChampionsMgr.GetItemsByName("Ahri", 0, await stub.ChampionsMgr.GetNbItemsByName("Ahri"));
-            Assert.AreEqual(championStub.First().Name, champions.First().Name);
+            Assert.AreEqual(championStub.Single().Name, champions.Name);
 
             // NOT OK
             var result2 = await controller.Get("Hugo") as NoContentResult;
@@ -118,10 +118,10 @@ namespace UnitTestAPI
             Assert.AreEqual(200, result.StatusCode);
 
             //NOT OK
-            var result2 = await controller.Delete("Hugo") as NotFoundResult;
+            var result2 = await controller.Delete("Hugo") as BadRequestResult;
 
             Assert.IsNotNull(result2);
-            Assert.AreEqual(404, result2.StatusCode);
+            Assert.AreEqual(400, result2.StatusCode);
         }
     }
 }
