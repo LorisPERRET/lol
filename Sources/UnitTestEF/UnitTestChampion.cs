@@ -41,7 +41,7 @@ namespace UnitTestEF
             }
         }
 
-        /*[TestMethod]
+        [TestMethod]
         public async Task TestDeleteChampion()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
@@ -51,61 +51,177 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            Champion item = new Champion("Blabla", ChampionClass.Tank);
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
 
             using (var context = new SqlLiteDbContext(options))
             {
                 context.Database.EnsureCreated();
-                await context.Champions.AddAsync(item.ToEntity());
-                
-                //Act
-                context.Champions.Remove(item.ToEntity());
+                await context.Champions.AddAsync(item);
                 context.SaveChanges();
-
-                //Assert
-                Assert.AreEqual(context.Champions.Count(), 6);
-                List<ChampionEntity> lesChampions = context.Champions.Where(c => c.Name == item.Name).ToList();
-                Assert.AreEqual(lesChampions.Count, 0);
+                Assert.AreEqual(context.Champions.Count(), 1);
+                //Act
+                context.Champions.Remove(item);
+                context.SaveChanges();
             }
-        }*/
 
-        [TestMethod]
-        public void TestGetChampion()
-        {
+            using (var context = new SqlLiteDbContext(options))
+            {
+                //Assert
+                Assert.AreEqual(context.Champions.Count(), 0);
+
+            }
         }
 
         [TestMethod]
-        public void TestGetChampionByName()
+        public async Task TestGetChampion()
         {
-        }
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            var options = new DbContextOptionsBuilder<SqlLiteDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
 
-        /*[TestMethod]
-        public void TestGetNbChampion()
-        {
-            DbDataManager dbManager = new DbDataManager();
-            StubData stubData = new StubData();
+            //Arange
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            List<ChampionEntity> lesChampions;
 
-            var result = dbManager.GetNbItems();
+            using (var context = new SqlLiteDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                await context.Champions.AddAsync(item);
+                context.SaveChanges();
+                Assert.AreEqual(context.Champions.Count(), 1);
+                //Act
+                lesChampions = context.Champions.Where(c => c.Name == item.Name).ToList();
+            }
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(stubData.ChampionsMgr.GetNbItems(), result);
+            using (var context = new SqlLiteDbContext(options))
+            {
+                //Assert
+                Assert.AreEqual(lesChampions.FirstOrDefault().Name, item.Name);
+            }
         }
 
         [TestMethod]
-        public void TestGetNbChampionByName()
+        public async Task TestGetChampionByName()
         {
-            DbDataManager dbManager = new DbDataManager();
-            StubData stubData = new StubData();
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            var options = new DbContextOptionsBuilder<SqlLiteDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
 
-            var result = dbManager.GetNbItemsByName("Ahri");
+            //Arange
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            List<ChampionEntity> lesChampions;
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(stubData.ChampionsMgr.GetNbItemsByName("Ahri"), result);
-        }*/
+            using (var context = new SqlLiteDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                await context.Champions.AddAsync(item);
+                context.SaveChanges();
+                Assert.AreEqual(context.Champions.Count(), 1);
+                //Act
+                lesChampions = context.Champions.Where(c => c.Name == item.Name).ToList();
+            }
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                //Assert
+                Assert.AreEqual(lesChampions.FirstOrDefault().Name, item.Name);
+            }
+        }
 
         [TestMethod]
-        public void TestUpdateChampion()
+        public async Task TestGetNbChampion()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            var options = new DbContextOptionsBuilder<SqlLiteDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
+
+            //Arange
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            int nbChampions = 0;
+            using (var context = new SqlLiteDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                await context.Champions.AddAsync(item);
+                context.SaveChanges();
+                Assert.AreEqual(context.Champions.Count(), 1);
+                //Act
+                nbChampions = await context.Champions.CountAsync();
+            }
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                //Assert
+                Assert.AreEqual(nbChampions, 1);
+            }
+        }
+
+        [TestMethod]
+        public async Task TestGetNbChampionByName()
+        {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            var options = new DbContextOptionsBuilder<SqlLiteDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
+
+            //Arange
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            int nbChampion = 0;
+            using (var context = new SqlLiteDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                await context.Champions.AddAsync(item);
+                context.SaveChanges();
+                Assert.AreEqual(context.Champions.Count(), 1);
+                //Act
+                nbChampion = await context.Champions.Where(c => c.Name == item.Name).CountAsync();
+            }
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                //Assert
+
+                Assert.AreEqual(nbChampion,1);
+            }
+        }
+
+        [TestMethod]
+        public async Task TestUpdateChampion()
+        {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            var options = new DbContextOptionsBuilder<SqlLiteDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
+
+            //Arange
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            List<ChampionEntity> lesChampions;
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                await context.Champions.AddAsync(item);
+                context.SaveChanges();
+                Assert.AreEqual(context.Champions.Count(), 1);
+                //Act
+                item.Bio = "tata";
+                context.Champions.Update(item);
+                context.SaveChanges();
+            }
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                //Assert
+                lesChampions = context.Champions.Where(c => c.Name == item.Name).ToList();
+                Assert.AreEqual(lesChampions.FirstOrDefault().Bio, "tata");
+            }
         }
     }
 }
