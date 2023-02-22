@@ -13,8 +13,8 @@ namespace UnitTestAPI
         [TestMethod]
         public async Task TestGetChampions()
         {
-            StubData stub = new StubData();
-            ChampionsController controller = new ChampionsController(stub);
+            IDataManager manager = new StubData();
+            ChampionsController controller = new ChampionsController(manager);
             
             var result = await controller.Get() as OkObjectResult;
             
@@ -24,15 +24,15 @@ namespace UnitTestAPI
             var champions = result.Value as IEnumerable<ChampionDto>;
 
             Assert.IsNotNull(champions);
-            Assert.AreEqual(await stub.ChampionsMgr.GetNbItems(),champions.Count());
+            Assert.AreEqual(await manager.ChampionsMgr.GetNbItems(),champions.Count());
 
         }
 
         [TestMethod]
         public async Task TestGetChampion()
         {
-            StubData stub = new StubData();
-            ChampionsController controller = new ChampionsController(stub);
+            IDataManager manager = new StubData();
+            ChampionsController controller = new ChampionsController(manager);
 
             // OK
             var result = await controller.Get("Ahri") as OkObjectResult;
@@ -40,12 +40,12 @@ namespace UnitTestAPI
             Assert.IsNotNull(result);
             Assert.AreEqual(200, result.StatusCode);
 
-            var champions = result.Value as IEnumerable<ChampionDto>;
+            var champions = result.Value as ChampionDto;
 
             Assert.IsNotNull(champions);
             var championStub =
-                await stub.ChampionsMgr.GetItemsByName("Ahri", 0, await stub.ChampionsMgr.GetNbItemsByName("Ahri"));
-            Assert.AreEqual(championStub.First().Name, champions.First().Name);
+                await manager.ChampionsMgr.GetItemsByName("Ahri", 0, await manager.ChampionsMgr.GetNbItemsByName("Ahri"));
+            Assert.AreEqual(championStub.Single().Name, champions.Name);
 
             // NOT OK
             var result2 = await controller.Get("Hugo") as NoContentResult;
@@ -58,8 +58,8 @@ namespace UnitTestAPI
         [TestMethod]
         public async Task TestPostChampion()
         {
-            StubData stub = new StubData();
-            ChampionsController controller = new ChampionsController(stub);
+            IDataManager manager = new StubData();
+            ChampionsController controller = new ChampionsController(manager);
             var championDepart = new Champion("Hugo", ChampionClass.Fighter).ToDto();
 
             //OK
@@ -81,8 +81,8 @@ namespace UnitTestAPI
         [TestMethod]
         public async Task TestPutChampion()
         {
-            StubData stub = new StubData();
-            ChampionsController controller = new ChampionsController(stub);
+            IDataManager manager = new StubData();
+            ChampionsController controller = new ChampionsController(manager);
             var championDepart = new Champion("Ahri", ChampionClass.Fighter).ToDto();
 
             //OK
@@ -108,9 +108,20 @@ namespace UnitTestAPI
         [TestMethod]
         public async Task TestDeleteChampion()
         {
-            StubData stub = new StubData();
-            ChampionsController controller = new ChampionsController(stub);
-            
+            IDataManager manager = new StubData();
+            ChampionsController controller = new ChampionsController(manager);
+
+            //OK
+            var result = await controller.Delete("Ahri") as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+
+            //NOT OK
+            var result2 = await controller.Delete("Hugo") as BadRequestResult;
+
+            Assert.IsNotNull(result2);
+            Assert.AreEqual(400, result2.StatusCode);
         }
     }
 }

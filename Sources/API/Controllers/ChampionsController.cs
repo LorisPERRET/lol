@@ -36,12 +36,13 @@ namespace API.Controllers
         [HttpGet("{nom}")]
         public async Task<IActionResult> Get(string nom)
         {
-            IEnumerable<Champion> champ = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0, await _dataManager.ChampionsMgr.GetNbItemsByName(nom), null);
+            IEnumerable<Champion> champ = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0, 
+                await _dataManager.ChampionsMgr.GetNbItemsByName(nom), null);
             if (champ.Count() == 0)
             {
                 return NoContent();
             }
-            return Ok(champ.ToDtos());
+            return Ok(champ.Single().ToDto());
         }
 
         // POST api/<ChampionsController>
@@ -53,12 +54,7 @@ namespace API.Controllers
                 await _dataManager.ChampionsMgr.AddItem(champion.ToChampion());
                 return CreatedAtAction(nameof(Get), champion.Name, champion);
             }
-            else
-            {
-                return BadRequest();
-            }
-            
-            
+            return BadRequest();
         }
 
         // PUT api/<ChampionsController>/5
@@ -66,10 +62,10 @@ namespace API.Controllers
         public async Task<IActionResult> Put(string nom, [FromBody] ChampionDto champion)
         {
             if (!nom.Equals(champion.Name)) return BadRequest();
-            var oldChampion = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0, await _dataManager.ChampionsMgr.GetNbItemsByName(nom));
+            var oldChampion = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0, 
+                await _dataManager.ChampionsMgr.GetNbItemsByName(nom));
             var newChampion = await _dataManager.ChampionsMgr.UpdateItem(oldChampion.FirstOrDefault(),champion.ToChampion());
             return Ok(newChampion.ToDto());
-            
         }
 
         // DELETE api/<ChampionsController>/5
@@ -82,9 +78,9 @@ namespace API.Controllers
             bool res = await _dataManager.ChampionsMgr.DeleteItem(champ.FirstOrDefault());
             if (res)
             {
-                return Ok();
+                return Ok(nom);
             }
-            return NotFound();
+            return BadRequest();
         }
     }
 }
