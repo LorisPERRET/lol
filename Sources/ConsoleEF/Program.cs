@@ -1,66 +1,134 @@
-﻿using DTO_EF.Mapper;
+﻿using DTO_EF;
+using DTO_EF.Mapper;
 using EntityFramework;
 using Model;
+using System.Data.SqlTypes;
+using System.Text;
 
+// Initialisation de la base
 using (var _context = new SqlLiteDbContext())
 {
+    _context.Database.EnsureDeleted();
+}
+
+// Ajout d'un champion
+using (var _context = new SqlLiteDbContext())
+{
+    _context.Database.EnsureDeleted();
+
     _context.Database.EnsureCreated();
+    StringBuilder myStringBuilder = new StringBuilder("Ajout du champion ");
 
-    var champion = new Champion("blabla", ChampionClass.Fighter);
+    var champion = new Champion("Hugo", ChampionClass.Fighter);
+    var championEntity = champion.ToEntity();
+    _context.Champions.Add(championEntity);
 
-    _context.Champions.Add(champion.ToEntity());
+    myStringBuilder.Append(champion.Name);
+
+    champion = new Champion("Loris", ChampionClass.Marksman);
+    championEntity = champion.ToEntity();
+    _context.Champions.Add(championEntity);
+
+    Console.WriteLine(myStringBuilder.Append(champion.Name));
+
     _context.SaveChanges();
 }
 
-/*
-public Task<Champion> AddItem(Champion item)
+// Modification d'un champion
+using (var _context = new SqlLiteDbContext())
 {
-    _context.Champions.Add(item.ToEntity());
-    return Task.FromResult<Champion>(item);
+    StringBuilder myStringBuilder = new StringBuilder("Modification du champion ");
+
+    var champion = _context.Champions.SingleOrDefault(c => c.Name.Equals("Hugo"));
+    myStringBuilder.Append(champion.Name);
+    myStringBuilder.Append("\nAncienne classe ");
+    myStringBuilder.Append(champion.Class);
+
+    champion.Class = ChampionClass.Tank.ToString();
+
+    myStringBuilder.Append("\nNouvelle classe ");
+    myStringBuilder.Append(champion.Class);
+
+    Console.WriteLine(myStringBuilder);
+
+    _context.SaveChanges();
 }
 
-public Task<bool> DeleteItem(Champion item)
+// Get champions
+using (var _context = new SqlLiteDbContext())
 {
-    var result = _context.Champions.Remove(item.ToEntity());
-    return Task.FromResult<bool>(result != null);
-}
+    _context.Database.EnsureCreated();
+    StringBuilder myStringBuilder = new StringBuilder("Il y a ");
 
-public Task<IEnumerable<Champion>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)
-{
-    var temp = _context.Champions.Skip(index * count).Take(count);
-    temp = GetItemWithFilter(orderingPropertyName, descending, temp);
-    return Task.FromResult(temp.ToList().ToChampions());
-}
+    var champions = _context.Champions;
 
-public Task<IEnumerable<Champion>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
-{
-    var temp = _context.Champions.Where(c => c.Name == substring).Skip(index * count).Take(count);
-    temp = GetItemWithFilter(orderingPropertyName, descending, temp);
-    return Task.FromResult(temp.ToList().ToChampions());
-}
-
-public Task<int> GetNbItems()
-{
-    var count = _context.Champions.Count();
-    return Task.FromResult<int>(count);
-}
-
-public Task<int> GetNbItemsByName(string substring)
-{
-    var count = _context.Champions.Count(item => item.Name == substring);
-    return Task.FromResult<int>(count);
-}
-
-public Task<Champion> UpdateItem(Champion oldItem, Champion newItem)
-{
-    if (oldItem == null || newItem == null) return Task.FromResult<Champion>(default(Champion));
-
-    if (!_context.Champions.Contains(oldItem.ToEntity()))
+    foreach (var champion in champions)
     {
-        return Task.FromResult<Champion>(default(Champion));
+        myStringBuilder.Append(champion.Name);
+        myStringBuilder.Append("\n");
     }
+    Console.WriteLine(myStringBuilder);
 
-    _context.Champions.Remove(oldItem.ToEntity());
-    _context.Champions.Add(newItem.ToEntity());
-    return Task.FromResult<Champion>(newItem);
-}*/
+    _context.SaveChanges();
+}
+
+// Get champion par nom
+using (var _context = new SqlLiteDbContext())
+{
+    _context.Database.EnsureCreated();
+    StringBuilder myStringBuilder = new StringBuilder("Il y a ");
+
+    var champions = _context.Champions.Where(c => c.Name.Equals("Hugo"));
+
+    foreach (var champion in champions)
+    {
+        myStringBuilder.Append(champion.Name);
+        myStringBuilder.Append("\n");
+    }
+    Console.WriteLine(myStringBuilder);
+
+    _context.SaveChanges();
+}
+
+// Get nombre champions
+using (var _context = new SqlLiteDbContext())
+{
+    _context.Database.EnsureCreated();
+    StringBuilder myStringBuilder = new StringBuilder("Il y a ");
+
+    var champion = _context.Champions.Count();
+
+    myStringBuilder.Append(champion);
+    Console.WriteLine(myStringBuilder.Append(" champions"));
+
+    _context.SaveChanges();
+}
+
+// Get nombre champion par nom
+using (var _context = new SqlLiteDbContext())
+{
+    _context.Database.EnsureCreated();
+    StringBuilder myStringBuilder = new StringBuilder("Il y a  ");
+
+    var champion = _context.Champions.Count(item => item.Name == "Hugo");
+
+    myStringBuilder.Append(champion);
+    Console.WriteLine(myStringBuilder.Append(" champions"));
+
+    _context.SaveChanges();
+}
+
+// Suppression d'un champion
+using (var _context = new SqlLiteDbContext())
+{
+    StringBuilder myStringBuilder = new StringBuilder("Suppression du champion ");
+
+    var champion = _context.Champions.SingleOrDefault(c => c.Name.Equals("Hugo"));
+    _context.Champions.Remove(champion);
+
+    Console.WriteLine(myStringBuilder.Append(champion.Name));
+
+    _context.SaveChanges();
+}
+
+Console.Read();

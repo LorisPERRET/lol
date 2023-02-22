@@ -2,12 +2,10 @@
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace EntityFramework.Migrations
 {
     /// <inheritdoc />
-    public partial class testMigration : Migration
+    public partial class newMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,19 +22,6 @@ namespace EntityFramework.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Champions", x => x.Name);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Champions",
-                columns: new[] { "Name", "Bio", "Class", "Icon" },
-                values: new object[,]
-                {
-                    { "Aatrox", "", "Fighter", "" },
-                    { "Ahri", "", "Mage", "" },
-                    { "Akali", "", "Assassin", "" },
-                    { "Akshan", "", "Marksman", "" },
-                    { "Alistar", "", "Tank", "" },
-                    { "Bard", "", "Support", "" }
                 });
         }
 
