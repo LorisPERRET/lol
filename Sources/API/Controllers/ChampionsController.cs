@@ -72,8 +72,7 @@ namespace API.Controllers
         [HttpDelete("{nom}")]
         public async Task<IActionResult> Delete(string nom)
         {
-            IEnumerable<Champion> champ = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0,
-                await _dataManager.ChampionsMgr.GetNbItemsByName(nom), null);
+            var champ = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0, await _dataManager.ChampionsMgr.GetNbItemsByName(nom));
             
             bool res = await _dataManager.ChampionsMgr.DeleteItem(champ.FirstOrDefault());
             if (res)
