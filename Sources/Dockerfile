@@ -27,4 +27,4 @@ FROM base AS final
 WORKDIR /api
 COPY --from=publish /api/publish .
 
-ENTRYPOINT ["ls"]
+ENTRYPOINT ["dotnet", "API.dll"]
