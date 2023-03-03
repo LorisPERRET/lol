@@ -12,6 +12,7 @@ namespace DTO_API
         public string Description { get; set; }
         public string Icon { get; set; }
         public float Price { get; set; }
-        public string Champion { get; set; }
+        public ChampionDto Champion { get; set; }
+        public LargeImageDto Image { get; set; }
     }
 }

@@ -17,18 +17,19 @@ namespace DTO_API.Mapper
                 Icon = skin.Icon,
                 Description = skin.Description,
                 Price = skin.Price,
-                Champion = skin.Champion.Name
+                Champion = skin.Champion.ToDto(),
+                Image = skin.Image.ToDto(),
             };
         }
 
         public static IEnumerable<SkinDto> ToDtos(this IEnumerable<Skin> skins)
         {
-            return skins.Select(c => ToDto(c));
+            return skins.Select(s => ToDto(s));
         }
 
-        public static Skin ToSkin(this SkinDto skin, Champion champion)
+        public static Skin ToSkin(this SkinDto skin)
         {
-            return new Skin(skin.Name, champion, skin.Price, skin.Icon, skin.Description);
+            return new Skin(skin.Name, skin.Champion.ToChampion(), skin.Price, skin.Icon, skin.Image.Base64, skin.Description);
         }
     }
 }

@@ -2,6 +2,8 @@ using API.Controllers;
 using DTO_API;
 using DTO_API.Mapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Model;
 using StubLib;
 
@@ -14,7 +16,7 @@ namespace UnitTestAPI
         public async Task TestGetChampions()
         {
             IDataManager manager = new StubData();
-            ChampionsController controller = new ChampionsController(manager);
+            ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
             
             var result = await controller.Get() as OkObjectResult;
             
@@ -32,7 +34,7 @@ namespace UnitTestAPI
         public async Task TestGetChampion()
         {
             IDataManager manager = new StubData();
-            ChampionsController controller = new ChampionsController(manager);
+            ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
 
             // OK
             var result = await controller.Get("Ahri") as OkObjectResult;
@@ -59,7 +61,7 @@ namespace UnitTestAPI
         public async Task TestPostChampion()
         {
             IDataManager manager = new StubData();
-            ChampionsController controller = new ChampionsController(manager);
+            ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
             var championDepart = new Champion("Hugo", ChampionClass.Fighter).ToDto();
 
             //OK
@@ -82,7 +84,7 @@ namespace UnitTestAPI
         public async Task TestPutChampion()
         {
             IDataManager manager = new StubData();
-            ChampionsController controller = new ChampionsController(manager);
+            ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
             var championDepart = new Champion("Ahri", ChampionClass.Fighter).ToDto();
 
             //OK
@@ -109,7 +111,7 @@ namespace UnitTestAPI
         public async Task TestDeleteChampion()
         {
             IDataManager manager = new StubData();
-            ChampionsController controller = new ChampionsController(manager);
+            ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
 
             //OK
             var result = await controller.Delete("Ahri") as OkObjectResult;

@@ -47,8 +47,7 @@ namespace API.Controllers
         {
             if (await _dataManager.SkinsMgr.GetNbItemsByName(skin.Name) == 0)
             {
-                var champion = await _dataManager.ChampionsMgr.GetItemsByName(skin.Champion, 0, await _dataManager.ChampionsMgr.GetNbItemsByName(skin.Champion));
-                await _dataManager.SkinsMgr.AddItem(skin.ToSkin(champion.SingleOrDefault()));
+                await _dataManager.SkinsMgr.AddItem(skin.ToSkin());
                 return CreatedAtAction(nameof(Get), skin.Name, skin);
             }
             return BadRequest();
@@ -62,9 +61,7 @@ namespace API.Controllers
             var oldSkin = await _dataManager.SkinsMgr.GetItemsByName(nom, 0,
                 await _dataManager.SkinsMgr.GetNbItemsByName(nom));
 
-            var champion = await _dataManager.ChampionsMgr.GetItemsByName(skin.Champion, 0, await _dataManager.ChampionsMgr.GetNbItemsByName(skin.Champion));
-
-            var newSkin = await _dataManager.SkinsMgr.UpdateItem(oldSkin.FirstOrDefault(), skin.ToSkin(champion.SingleOrDefault()));
+            var newSkin = await _dataManager.SkinsMgr.UpdateItem(oldSkin.FirstOrDefault(), skin.ToSkin());
             return Ok(newSkin.ToDto());
         }
 

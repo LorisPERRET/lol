@@ -13,6 +13,10 @@ builder.Services.AddSwaggerGen();
 // Manager choice
 builder.Services.AddSingleton<IDataManager, StubData>();
 
+// Logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 
 var app = builder.Build();
 
