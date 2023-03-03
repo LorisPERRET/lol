@@ -9,12 +9,26 @@ namespace ClientAPI
 {
     public class API : IDataManager
     {
-        public IChampionsManager ChampionsMgr => throw new NotImplementedException();
+        private HttpClient _httpClient;
 
-        public ISkinsManager SkinsMgr => throw new NotImplementedException();
+        public IChampionsManager ChampionsMgr { get; }
 
-        public IRunesManager RunesMgr => throw new NotImplementedException();
+        public ISkinsManager SkinsMgr { get; }
 
-        public IRunePagesManager RunePagesMgr => throw new NotImplementedException();
+        public IRunesManager RunesMgr { get; }
+
+        public IRunePagesManager RunePagesMgr { get; }
+
+        public API()
+        {
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri("https://localhost:7185");
+
+            ChampionsMgr = new APIChampions(_httpClient);
+            SkinsMgr = new APISkins(_httpClient);
+            RunesMgr = new APIRunes(_httpClient);
+            RunePagesMgr = new APIRunePages(_httpClient);
+        }
+
     }
 }

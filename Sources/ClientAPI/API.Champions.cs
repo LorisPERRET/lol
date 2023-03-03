@@ -1,7 +1,9 @@
-﻿using Model;
+﻿using DTO_API;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,14 +11,31 @@ namespace ClientAPI
 {
     public class APIChampions : IChampionsManager
     {
-        public Task<Champion?> AddItem(Champion? item)
+        public HttpClient _httpClient { get; }
+
+        public APIChampions(HttpClient httpClient)
         {
-            throw new NotImplementedException();
+            _httpClient = httpClient;
         }
 
-        public Task<bool> DeleteItem(Champion? item)
+        public async Task<Champion?> AddItem(Champion? item)
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.PostAsJsonAsync("/api/Champions", item);
+            if (res.StatusCode == System.Net.HttpStatusCode.Created)
+            {
+                return await res.Content.ReadFromJsonAsync<Champion>();
+            }
+            else throw new HttpRequestException();
+        }
+
+        public async Task<bool> DeleteItem(Champion? item)
+        {
+            var res = await _httpClient.DeleteAsync($"/api/Champions/{item.Name}");
+            if (res.StatusCode == System.Net.HttpStatusCode.Created)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public Task<IEnumerable<Champion?>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)

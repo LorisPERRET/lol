@@ -9,6 +9,13 @@ namespace ClientAPI
 {
     public class APIRunePages : IRunePagesManager
     {
+        public HttpClient _httpClient { get; }
+
+        public APIRunePages(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public Task<RunePage?> AddItem(RunePage? item)
         {
             throw new NotImplementedException();

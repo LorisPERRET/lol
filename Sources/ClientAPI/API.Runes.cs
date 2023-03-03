@@ -9,6 +9,13 @@ namespace ClientAPI
 {
     public class APIRunes : IRunesManager
     {
+        public HttpClient _httpClient { get; }
+
+        public APIRunes(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public Task<Model.Rune?> AddItem(Model.Rune? item)
         {
             throw new NotImplementedException();

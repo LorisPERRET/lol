@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DTO\DTO_API.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>
 

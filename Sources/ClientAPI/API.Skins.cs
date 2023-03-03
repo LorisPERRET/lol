@@ -9,6 +9,13 @@ namespace ClientAPI
 {
     public class APISkins : ISkinsManager
     {
+        public HttpClient _httpClient { get; }
+
+        public APISkins(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public Task<Skin?> AddItem(Skin? item)
         {
             throw new NotImplementedException();
