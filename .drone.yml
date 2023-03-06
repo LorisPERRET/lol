@@ -11,6 +11,7 @@ steps:
       image: mcr.microsoft.com/dotnet/sdk:7.0
       commands:
         - cd Sources
+        - dotnet workload restore
         - dotnet restore LeagueOfLegendsCI.sln
         - dotnet build LeagueOfLegendsCI.sln -c Release --no-restore
         - dotnet publish LeagueOfLegendsCI.sln -c Release --no-restore -o CI_PROJECT_DIR/build/release
@@ -19,6 +20,7 @@ steps:
       image: mcr.microsoft.com/dotnet/sdk:7.0
       commands:
         - cd Sources
+        - dotnet workload restore
         - dotnet restore LeagueOfLegendsCI.sln
         - dotnet test LeagueOfLegendsCI.sln --no-restore
       depends_on: [build]
@@ -27,6 +29,7 @@ steps:
       image: hub.codefirst.iut.uca.fr/marc.chevaldonne/codefirst-dronesonarplugin-dotnet7
       commands:
         - cd Sources/
+        - dotnet workload restore
         - dotnet restore LeagueOfLegendsCI.sln
         - dotnet sonarscanner begin /k:LolProject /d:sonar.host.url=$${PLUGIN_SONAR_HOST} /d:sonar.coverageReportPaths="coveragereport/SonarQube.xml" /d:sonar.coverage.exclusions="Tests/**" /d:sonar.login=$${PLUGIN_SONAR_TOKEN} 
         - dotnet build LeagueOfLegendsCI.sln -c Release --no-restore
