@@ -25,27 +25,60 @@ namespace API.Controllers
 
         // GET: api/<ChampionsController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery]int page = 0, [FromQuery]int offset = 10, [FromQuery]string? championClass = null)
         {
             try
             {
-                IEnumerable<Champion> champ = await _dataManager.ChampionsMgr.GetItems(0, 
-                                                    await _dataManager.ChampionsMgr.GetNbItems());
-                if (champ.Count() == 0)
+                if (offset > 30 || offset  < 0)
+                {
+                    _logger.LogInformation("Le nombre d'item demandé ne peut être supérieur à 30 ou inférieur à 0");
+                    return Forbid();
+                }
+
+                if (championClass is not null)
+                {
+                    var classes = Enum.GetNames(typeof(ChampionClass));
+                    if (!classes.Contains(championClass))
+                    {
+                        _logger.LogInformation("La classe choisie n'existe pas");
+                        return Forbid();
+                    }
+                }
+
+                var nbItem = championClass is null ? await _dataManager.ChampionsMgr.GetNbItems() : await _dataManager.ChampionsMgr.GetNbItemsByClass(Enum.Parse<ChampionClass>(championClass));
+                var nbPage = Math.Ceiling((double)nbItem / offset);
+                if (page > 0 || page > nbPage)
+                {
+                    _logger.LogInformation("Le numero de page est incorrect");
+                    return Forbid();
+                }
+
+                var startIndex = page * offset;
+
+                IEnumerable<Champion> champ = championClass is null ? await _dataManager.ChampionsMgr.GetItems(startIndex, offset) : await _dataManager.ChampionsMgr.GetItemsByClass(Enum.Parse<ChampionClass>(championClass), startIndex, offset);
+                if (champ.Any())
                 {
                     _logger.LogInformation("Aucun champion n'a été trouvé");
                     return NoContent();
                 }
-                return Ok(champ.ToDtos());
+
+                var result = new
+                {
+                    nbItem,
+                    offset,
+                    items = champ.ToDtos(),
+                };
+
+                return Ok(result);
+
             } catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
                 return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
             }
-            
         }
 
-        // GET api/<ChampionsController>/5
+        // GET api/<ChampionsController>/test
         [HttpGet("{nom}")]
         public async Task<IActionResult> Get(string nom)
         {
@@ -86,7 +119,7 @@ namespace API.Controllers
             }
         }
 
-        // PUT api/<ChampionsController>/5
+        // PUT api/<ChampionsController>/test
         [HttpPut("{nom}")]
         public async Task<IActionResult> Put(string nom, [FromBody] ChampionDto champion)
         {
@@ -108,7 +141,7 @@ namespace API.Controllers
             }
         }
 
-        // DELETE api/<ChampionsController>/5
+        // DELETE api/<ChampionsController>/test
         [HttpDelete("{nom}")]
         public async Task<IActionResult> Delete(string nom)
         {

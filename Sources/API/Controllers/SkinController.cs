@@ -3,6 +3,7 @@ using DTO_API.Mapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
+using System;
 using System.Net;
 
 namespace API.Controllers
@@ -22,17 +23,42 @@ namespace API.Controllers
 
         // GET: api/<SkinController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] int page = 0, [FromQuery] int offset = 10)
         {
             try
             {
-                IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItems(0, await _dataManager.SkinsMgr.GetNbItems());
-                if (skins.Count() == 0)
+                if (offset > 30 || offset < 0)
+                {
+                    _logger.LogInformation("Le nombre d'item demandé ne peut être supérieur à 30 ou inférieur à 0");
+                    return Forbid();
+                }
+
+
+
+                var nbItem = await _dataManager.ChampionsMgr.GetNbItems();
+                var nbPage = Math.Ceiling((double)nbItem / offset);
+                if (page > 0 || page > nbPage)
+                {
+                    _logger.LogInformation("Le numero de page est incorrect");
+                    return Forbid();
+                }
+
+                var startIndex = page * offset;
+                IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItems(startIndex, offset);
+                if (skins.Any())
                 {
                     _logger.LogInformation("Aucun skin n'a été trouvé");
                     return NoContent();
                 }
-                return Ok(skins.ToDtos());
+
+                var result = new
+                {
+                    nbItem,
+                    offset,
+                    items = skins.ToDtos(),
+                };
+
+                return Ok(result);
 
             } catch (Exception)
             {
@@ -41,7 +67,7 @@ namespace API.Controllers
             }
         }
 
-        // GET api/<SkinController>/5
+        // GET api/<SkinController>/test
         [HttpGet("{nom}")]
         public async Task<IActionResult> Get(string nom)
         {
@@ -85,7 +111,7 @@ namespace API.Controllers
             }
         }
 
-        // PUT api/<SkinController>/5
+        // PUT api/<SkinController>/test
         [HttpPut("{nom}")]
         public async Task<IActionResult> Put(string nom, [FromBody] SkinDto skin)
         {
@@ -110,7 +136,7 @@ namespace API.Controllers
             }
         }
 
-        // DELETE api/<SkinController>/5
+        // DELETE api/<SkinController>/test
         [HttpDelete("{nom}")]
         public async Task<IActionResult> Delete(string nom)
         {
