@@ -12,7 +12,6 @@ namespace ClientAPI
     public class APIChampions : IChampionsManager
     {
         public HttpClient _httpClient { get; }
-
         public APIChampions(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -20,7 +19,7 @@ namespace ClientAPI
 
         public async Task<Champion?> AddItem(Champion? item)
         {
-            var res = await _httpClient.PostAsJsonAsync("/api/Champions", item);
+            var res = await _httpClient.PostAsJsonAsync("/Champions", item);
             if (res.StatusCode == System.Net.HttpStatusCode.Created)
             {
                 return await res.Content.ReadFromJsonAsync<Champion>();
@@ -30,7 +29,7 @@ namespace ClientAPI
 
         public async Task<bool> DeleteItem(Champion? item)
         {
-            var res = await _httpClient.DeleteAsync($"/api/Champions/{item.Name}");
+            var res = await _httpClient.DeleteAsync($"/Champions/{item.Name}");
             if (res.StatusCode == System.Net.HttpStatusCode.Created)
             {
                 return true;
@@ -38,9 +37,11 @@ namespace ClientAPI
             else return false;
         }
 
-        public Task<IEnumerable<Champion?>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Champion?>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
+            //var res = await _httpClient.GetAsync($"");
             throw new NotImplementedException();
+
         }
 
         public Task<IEnumerable<Champion?>> GetItemsByCharacteristic(string charName, int index, int count, string? orderingPropertyName = null, bool descending = false)

@@ -22,7 +22,7 @@ namespace ClientAPI
         public API()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7185");
+            _httpClient.BaseAddress = new Uri("https://localhost:7185/api");
 
             ChampionsMgr = new APIChampions(_httpClient);
             SkinsMgr = new APISkins(_httpClient);
