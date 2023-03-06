@@ -8,34 +8,34 @@ trigger :
 
 steps:
     - name: build
-      image: mcr.microsoft.com/dotnet/sdk:6.0
+      image: mcr.microsoft.com/dotnet/sdk:7.0
       commands:
         - cd Sources
         - dotnet workload restore
-        - dotnet restore LeagueOfLegends.sln
-        - dotnet build LeagueOfLegends.sln -c Release --no-restore
-        - dotnet publish LeagueOfLegends.sln -c Release --no-restore -o CI_PROJECT_DIR/build/release
+        - dotnet restore LeagueOfLegendsCI.sln
+        - dotnet build LeagueOfLegendsCI.sln -c Release --no-restore
+        - dotnet publish LeagueOfLegendsCI.sln -c Release --no-restore -o CI_PROJECT_DIR/build/release
 
     - name: tests
-      image: mcr.microsoft.com/dotnet/sdk:6.0
+      image: mcr.microsoft.com/dotnet/sdk:7.0
       commands:
         - cd Sources
         - dotnet workload restore
-        - dotnet restore LeagueOfLegends.sln
-        - dotnet test LeagueOfLegends.sln --no-restore
+        - dotnet restore LeagueOfLegendsCI.sln
+        - dotnet test LeagueOfLegendsCI.sln --no-restore
       depends_on: [build]
 
     - name: code-analysis
-      image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dronesonarplugin-dotnet6
+      image: hub.codefirst.iut.uca.fr/marc.chevaldonne/codefirst-dronesonarplugin-dotnet7
       commands:
         - cd Sources/
         - dotnet workload restore
-        - dotnet restore LeagueOfLegends.sln
+        - dotnet restore LeagueOfLegendsCI.sln
         - dotnet sonarscanner begin /k:LolProject /d:sonar.host.url=$${PLUGIN_SONAR_HOST} /d:sonar.coverageReportPaths="coveragereport/SonarQube.xml" /d:sonar.coverage.exclusions="Tests/**" /d:sonar.login=$${PLUGIN_SONAR_TOKEN} 
-        - dotnet build LeagueOfLegends.sln -c Release --no-restore
-        - dotnet test LeagueOfLegends.sln --logger trx --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --collect "XPlat Code Coverage"
+        - dotnet build LeagueOfLegendsCI.sln -c Release --no-restore
+        - dotnet test LeagueOfLegendsCI.sln --logger trx --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --collect "XPlat Code Coverage"
         - reportgenerator -reports:"**/coverage.cobertura.xml" -reporttypes:SonarQube -targetdir:"coveragereport"
-        - dotnet publish LeagueOfLegends.sln -c Release --no-restore -o CI_PROJECT_DIR/build/release
+        - dotnet publish LeagueOfLegendsCI.sln -c Release --no-restore -o CI_PROJECT_DIR/build/release
         - dotnet sonarscanner end /d:sonar.login=$${PLUGIN_SONAR_TOKEN}
       secrets: [ SECRET_SONAR_LOGIN ]
       settings:
@@ -66,4 +66,3 @@ steps:
           OVERWRITE: true
           ADMINS: lorisperret,hugolivet
       depends_on: [docker-build-and-push-image]
-
