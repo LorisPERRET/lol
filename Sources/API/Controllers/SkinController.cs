@@ -23,7 +23,7 @@ namespace API.Controllers
 
         // GET: api/<SkinController>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int page = 0, [FromQuery] int offset = 10)
+        public async Task<IActionResult> Get([FromQuery] int page = 0, [FromQuery] int offset = 10, [FromQuery] string? orderingPropertyName = null, [FromQuery] bool descending = false)
         {
             try
             {
@@ -32,8 +32,6 @@ namespace API.Controllers
                     _logger.LogInformation("Le nombre d'item demandé ne peut être supérieur à 30 ou inférieur à 0");
                     return Forbid();
                 }
-
-
 
                 var nbItem = await _dataManager.ChampionsMgr.GetNbItems();
                 var nbPage = Math.Ceiling((double)nbItem / offset);
@@ -44,7 +42,7 @@ namespace API.Controllers
                 }
 
                 var startIndex = page * offset;
-                IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItems(startIndex, offset);
+                IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItems(startIndex, offset, orderingPropertyName, descending);
                 if (skins.Any())
                 {
                     _logger.LogInformation("Aucun skin n'a été trouvé");
@@ -73,14 +71,37 @@ namespace API.Controllers
         {
             try
             {
-                IEnumerable<Skin> skin = await _dataManager.SkinsMgr.GetItemsByName(nom, 0,
-                    await _dataManager.SkinsMgr.GetNbItemsByName(nom), null);
-                if (skin.Count() == 0)
+                IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItemsByName(nom, 0, await _dataManager.SkinsMgr.GetNbItemsByName(nom));
+                if (skins.Count() == 0)
                 {
                     _logger.LogInformation("Aucun skin n'a été trouvé");
                     return NoContent();
                 }
-                return Ok(skin.Single().ToDto());
+                return Ok(skins.Single().ToDto());
+
+            }
+            catch (Exception)
+            {
+                _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
+                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+            }
+        }
+
+        // GET api/<SkinController>/test/image
+        [HttpGet("{nom}")]
+        public async Task<IActionResult> GetImage(string nom)
+        {
+            try
+            {
+                IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItemsByName(nom, 0, await _dataManager.SkinsMgr.GetNbItemsByName(nom));
+                if (skins.Count() == 0)
+                {
+                    _logger.LogInformation("Aucun skin n'a été trouvé");
+                    return NoContent();
+                }
+                var skin = skins.Single();
+
+                return Ok(skin.Image.ToDto());
 
             }
             catch (Exception)
