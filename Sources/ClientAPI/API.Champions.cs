@@ -1,4 +1,5 @@
 ﻿using DTO_API;
+using DTO_API.Mapper;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,10 @@ namespace ClientAPI
 
         public async Task<Champion?> AddItem(Champion? item)
         {
-            var res = await _httpClient.PostAsJsonAsync("/Champions", item);
+            var res = await _httpClient.PostAsJsonAsync<ChampionDto>("/Champions", item.ToDto());
             if (res.StatusCode == System.Net.HttpStatusCode.Created)
             {
-                return await res.Content.ReadFromJsonAsync<Champion>();
+                return (await res.Content.ReadFromJsonAsync<ChampionDto>()).ToChampion();
             }
             else throw new HttpRequestException();
         }
@@ -30,7 +31,7 @@ namespace ClientAPI
         public async Task<bool> DeleteItem(Champion? item)
         {
             var res = await _httpClient.DeleteAsync($"/Champions/{item.Name}");
-            if (res.StatusCode == System.Net.HttpStatusCode.Created)
+            if (res.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return true;
             }
