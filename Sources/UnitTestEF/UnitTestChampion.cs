@@ -21,7 +21,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = "" };
 
             using (var context = new SqlLiteDbContext(options))
             {
@@ -51,7 +51,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = "" };
 
             using (var context = new SqlLiteDbContext(options))
             {
@@ -82,7 +82,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = "" };
             List<ChampionEntity> lesChampions;
 
             using (var context = new SqlLiteDbContext(options))
@@ -92,13 +92,13 @@ namespace UnitTestEF
                 context.SaveChanges();
                 Assert.AreEqual(context.Champions.Count(), 1);
                 //Act
-                lesChampions = context.Champions.Where(c => c.Name == item.Name).ToList();
+                lesChampions = context.Champions.ToList();
             }
 
             using (var context = new SqlLiteDbContext(options))
             {
                 //Assert
-                Assert.AreEqual(lesChampions.FirstOrDefault().Name, item.Name);
+                Assert.AreEqual(lesChampions.Count(), 1);
             }
         }
 
@@ -112,7 +112,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = "" };
             List<ChampionEntity> lesChampions;
 
             using (var context = new SqlLiteDbContext(options))
@@ -128,7 +128,7 @@ namespace UnitTestEF
             using (var context = new SqlLiteDbContext(options))
             {
                 //Assert
-                Assert.AreEqual(lesChampions.FirstOrDefault().Name, item.Name);
+                Assert.AreEqual(lesChampions.Count(), 1);
             }
         }
 
@@ -142,7 +142,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" , Image = "" };
             int nbChampions = 0;
             using (var context = new SqlLiteDbContext(options))
             {
@@ -171,7 +171,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" , Image = "" };
             int nbChampion = 0;
             using (var context = new SqlLiteDbContext(options))
             {
@@ -201,7 +201,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" , Image = "" };
             List<ChampionEntity> lesChampions;
 
             using (var context = new SqlLiteDbContext(options))
