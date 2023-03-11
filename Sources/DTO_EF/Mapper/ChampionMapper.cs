@@ -12,7 +12,8 @@ namespace DTO_EF.Mapper
                 Name = champion.Name,
                 Bio = champion.Bio,
                 Class = champion.Class.ToString(),
-                Icon = champion.Icon
+                Icon = champion.Icon,
+                Image = champion.Image.Base64,
             };
         }
 
@@ -24,7 +25,7 @@ namespace DTO_EF.Mapper
 
         public static Champion ToChampion(this ChampionEntity champion)
         {
-            return new Champion(champion.Name, Enum.Parse<ChampionClass>(champion.Class), champion.Icon, "", champion.Bio);
+            return new Champion(champion.Name, Enum.Parse<ChampionClass>(champion.Class), champion.Icon, champion.Image, champion.Bio);
         }
 
         public static IEnumerable<Champion> ToChampions(this IEnumerable<ChampionEntity> champions)
