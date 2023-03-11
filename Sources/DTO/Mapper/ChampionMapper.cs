@@ -22,8 +22,7 @@ namespace DTO_API.Mapper
 
         public static Champion ToChampion(this ChampionDto champion)
         {
-            return new Champion(champion.Name, Enum.Parse<ChampionClass>(champion.Class), champion.Icon, "", champion.Bio);
+            return new Champion(champion.Name, Enum.Parse<ChampionClass>(champion.Class), champion.Icon, champion.Bio);
         }
-
     }
 }

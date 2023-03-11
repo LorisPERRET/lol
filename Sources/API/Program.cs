@@ -1,3 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Any;
 using Model;
 using StubLib;
 
@@ -12,6 +15,11 @@ builder.Services.AddSwaggerGen();
 
 // Manager choice
 builder.Services.AddSingleton<IDataManager, StubData>();
+builder.Services.AddSingleton<ILogger, Logger<AnyType>>();
+
+// Logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 
 var app = builder.Build();
