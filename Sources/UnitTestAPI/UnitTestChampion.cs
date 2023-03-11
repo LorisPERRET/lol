@@ -1,6 +1,7 @@
 using API.Controllers;
 using DTO_API;
 using DTO_API.Mapper;
+using DTO_API.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -17,16 +18,20 @@ namespace UnitTestAPI
         {
             IDataManager manager = new StubData();
             ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
-            
+
             var result = await controller.Get() as OkObjectResult;
+
             
+
             Assert.IsNotNull(result);
             Assert.AreEqual(200, result.StatusCode);
 
-            var champions = result.Value as IEnumerable<ChampionDto>;
 
-            Assert.IsNotNull(champions);
-            Assert.AreEqual(await manager.ChampionsMgr.GetNbItems(),champions.Count());
+
+            var champions = result.Value as Page<IEnumerable<ChampionDto>>;
+
+            Assert.IsNotNull(champions.Items);
+            Assert.AreEqual(await manager.ChampionsMgr.GetNbItems(),champions.Items.Count());
 
         }
 

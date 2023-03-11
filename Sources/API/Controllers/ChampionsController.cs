@@ -1,5 +1,6 @@
 ﻿using DTO_API;
 using DTO_API.Mapper;
+using DTO_API.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using StubLib;
@@ -56,20 +57,13 @@ namespace API.Controllers
                 var startIndex = page * offset;
 
                 IEnumerable<Champion> champ = championClass is null ? await _dataManager.ChampionsMgr.GetItems(startIndex, offset, orderingPropertyName, descending) : await _dataManager.ChampionsMgr.GetItemsByClass(Enum.Parse<ChampionClass>(championClass), startIndex, offset, orderingPropertyName, descending);
-                if (champ.Any())
+                if (champ.Count() == 0)
                 {
                     _logger.LogInformation("Aucun champion n'a été trouvé");
                     return NoContent();
                 }
 
-                var result = new
-                {
-                    nbItem,
-                    offset,
-                    items = champ.ToDtos(),
-                };
-
-                return Ok(result);
+                return Ok(new Page<IEnumerable<ChampionDto>>(nbItem,offset, champ.ToDtos()));
 
             } catch (Exception)
             {
@@ -99,7 +93,7 @@ namespace API.Controllers
         }
 
         // GET api/<ChampionsController>/test/image
-        [HttpGet("{nom}")]
+        [HttpGet("{nom}/image")]
         public async Task<IActionResult> GetImage(string nom)
         {
             try
@@ -122,7 +116,7 @@ namespace API.Controllers
         }
 
         // Get api/<ChampionsController>/test/skins
-        [HttpGet("{nom}")]
+        [HttpGet("{nom}/skins")]
         public async Task<IActionResult> GetSkins(string nom, [FromQuery] int page = 0, [FromQuery] int offset = 10, [FromQuery] string? orderingPropertyName = null, [FromQuery] bool descending = false)
         {
             try

@@ -43,7 +43,7 @@ namespace API.Controllers
 
                 var startIndex = page * offset;
                 IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItems(startIndex, offset, orderingPropertyName, descending);
-                if (skins.Any())
+                if (skins.Count() == 0)
                 {
                     _logger.LogInformation("Aucun skin n'a été trouvé");
                     return NoContent();
@@ -88,7 +88,7 @@ namespace API.Controllers
         }
 
         // GET api/<SkinController>/test/image
-        [HttpGet("{nom}")]
+        [HttpGet("{nom}/image")]
         public async Task<IActionResult> GetImage(string nom)
         {
             try
