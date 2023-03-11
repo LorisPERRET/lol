@@ -1,5 +1,6 @@
 ﻿using DTO_API;
 using DTO_API.Mapper;
+using DTO_API.Pagination;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -49,14 +50,7 @@ namespace API.Controllers
                     return NoContent();
                 }
 
-                var result = new
-                {
-                    nbItem,
-                    offset,
-                    items = skins.ToDtos(),
-                };
-
-                return Ok(result);
+                return Ok(new Page<IEnumerable<SkinDto>>(nbItem, offset, skins.ToDtos()));
 
             } catch (Exception)
             {

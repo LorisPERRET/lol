@@ -146,14 +146,7 @@ namespace API.Controllers
                 var startIndex = page * offset;
                 IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItemsByChampion(champion, startIndex, offset, orderingPropertyName, descending);
 
-                var result = new
-                {
-                    nbItem,
-                    offset,
-                    items = skins.ToDtos(),
-                };
-
-                return Ok(result);
+                return Ok(new Page<IEnumerable<SkinDto>>(nbItem, offset, skins.ToDtos()));
 
             }
             catch (Exception)
