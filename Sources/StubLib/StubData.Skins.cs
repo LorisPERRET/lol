@@ -9,7 +9,7 @@ namespace StubLib
 
 		private void InitSkins()
 		{
-			skins.Add(new Skin("Stinger", champions[0]));
+			skins.Add(new Skin("Stinger", champions[0], 0, "", "image.png"));
 			skins.Add(new Skin("Infernal", champions[0]));
 			skins.Add(new Skin("All-Star", champions[0]));
 			skins.Add(new Skin("Justicar", champions[1]));

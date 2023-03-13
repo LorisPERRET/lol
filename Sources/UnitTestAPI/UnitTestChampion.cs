@@ -21,22 +21,50 @@ namespace UnitTestAPI
 
             var result = await controller.Get() as OkObjectResult;
 
-            
-
             Assert.IsNotNull(result);
             Assert.AreEqual(200, result.StatusCode);
-
-
 
             var champions = result.Value as Page<IEnumerable<ChampionDto>>;
 
             Assert.IsNotNull(champions.Items);
             Assert.AreEqual(await manager.ChampionsMgr.GetNbItems(),champions.Items.Count());
-
         }
 
         [TestMethod]
-        public async Task TestGetChampion()
+        public async Task TestGetChampionsWithPagination()
+        {
+            IDataManager manager = new StubData();
+            ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
+
+            // OK
+            var result = await controller.Get(0, 2) as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+
+            var champions = result.Value as Page<IEnumerable<ChampionDto>>;
+
+            Assert.IsNotNull(champions.Items);
+            Assert.AreEqual(2, champions.Items.Count());
+
+            // NOT OK
+            // OFFSET NOT OK
+            var result2 = await controller.Get(0, 10000) as ForbidResult;
+            Assert.IsNotNull(result2);
+
+            var result3 = await controller.Get(0, -1) as ForbidResult;
+            Assert.IsNotNull(result3);
+
+            // PAGE NOT OK
+            var result4 = await controller.Get(-1, 10) as ForbidResult;
+            Assert.IsNotNull(result4);
+
+            var result5 = await controller.Get(1000, 10) as ForbidResult;
+            Assert.IsNotNull(result5);
+        }
+
+        [TestMethod]
+        public async Task TestGetChampionByName()
         {
             IDataManager manager = new StubData();
             ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
@@ -50,8 +78,7 @@ namespace UnitTestAPI
             var champions = result.Value as ChampionDto;
 
             Assert.IsNotNull(champions);
-            var championStub =
-                await manager.ChampionsMgr.GetItemsByName("Ahri", 0, await manager.ChampionsMgr.GetNbItemsByName("Ahri"));
+            var championStub = await manager.ChampionsMgr.GetItemsByName("Ahri", 0, await manager.ChampionsMgr.GetNbItemsByName("Ahri"));
             Assert.AreEqual(championStub.Single().Name, champions.Name);
 
             // NOT OK
@@ -59,7 +86,66 @@ namespace UnitTestAPI
 
             Assert.IsNotNull(result2);
             Assert.AreEqual(204, result2.StatusCode);
+        }
 
+        [TestMethod]
+        public async Task TestGetChampionsByClass()
+        {
+            IDataManager manager = new StubData();
+            ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
+
+            // OK
+            var result = await controller.Get(0, await manager.ChampionsMgr.GetNbItems(), "Assassin") as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+
+            var champions = result.Value as Page<IEnumerable<ChampionDto>>;
+
+            Assert.IsNotNull(champions.Items);
+            Assert.AreEqual(await manager.ChampionsMgr.GetNbItemsByClass(ChampionClass.Assassin), champions.Items.Count());
+
+            // NOT OK
+            var result2 = await controller.Get(0, await manager.ChampionsMgr.GetNbItems(), "Inexistant") as ForbidResult;
+            Assert.IsNotNull(result2);
+        }
+
+        [TestMethod]
+        public async Task TestGetImage()
+        {
+            IDataManager manager = new StubData();
+            ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
+
+            var championStub = new Champion("Ahri", ChampionClass.Mage, "", "image.png");
+
+            var result = await controller.GetImage(championStub.Name) as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+
+            var img = result.Value as LargeImageDto;
+
+            Assert.IsNotNull(img);
+            Assert.AreEqual(championStub.Image.Base64, img.Base64);
+        }
+
+        [TestMethod]
+        public async Task TestGetSkins()
+        {
+            IDataManager manager = new StubData();
+            ChampionsController controller = new ChampionsController(manager, new NullLogger<ChampionsController>());
+
+            var championStub = new Champion("Ahri");
+
+            var result = await controller.GetSkins(championStub.Name) as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+
+            var skins = result.Value as Page<IEnumerable<SkinDto>>;
+
+            Assert.IsNotNull(skins.Items);
+            Assert.AreEqual(await manager.SkinsMgr.GetNbItemsByChampion(championStub), skins.Items.Count());
         }
 
         [TestMethod]

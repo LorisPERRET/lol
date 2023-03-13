@@ -30,7 +30,7 @@ namespace API.Controllers
         {
             try
             {
-                if (offset > 30 || offset  < 0)
+                if (offset > 30 || offset < 0)
                 {
                     _logger.LogInformation("Le nombre d'item demandé ne peut être supérieur à 30 ou inférieur à 0");
                     return Forbid();
@@ -48,7 +48,7 @@ namespace API.Controllers
 
                 var nbItem = championClass is null ? await _dataManager.ChampionsMgr.GetNbItems() : await _dataManager.ChampionsMgr.GetNbItemsByClass(Enum.Parse<ChampionClass>(championClass));
                 var nbPage = Math.Ceiling((double)nbItem / offset);
-                if (page > 0 || page > nbPage)
+                if (page < 0 || page > nbPage)
                 {
                     _logger.LogInformation("Le numero de page est incorrect");
                     return Forbid();

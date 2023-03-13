@@ -9,7 +9,7 @@ namespace StubLib
 		{
 			new Champion("Akali", ChampionClass.Assassin),
 			new Champion("Aatrox", ChampionClass.Fighter),
-			new Champion("Ahri", ChampionClass.Mage),
+			new Champion("Ahri", ChampionClass.Mage, "", "image.png"),
 			new Champion("Akshan", ChampionClass.Marksman),
 			new Champion("Bard", ChampionClass.Support),
 			new Champion("Alistar", ChampionClass.Tank),

@@ -36,7 +36,7 @@ namespace API.Controllers
 
                 var nbItem = await _dataManager.ChampionsMgr.GetNbItems();
                 var nbPage = Math.Ceiling((double)nbItem / offset);
-                if (page > 0 || page > nbPage)
+                if (page < 0 || page > nbPage)
                 {
                     _logger.LogInformation("Le numero de page est incorrect");
                     return Forbid();
