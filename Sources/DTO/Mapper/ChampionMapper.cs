@@ -24,5 +24,15 @@ namespace DTO_API.Mapper
         {
             return new Champion(champion.Name, Enum.Parse<ChampionClass>(champion.Class), champion.Icon, champion.Bio);
         }
+
+        public static IEnumerable<Champion> ToChampions(this IEnumerable<ChampionDto> champions)
+        {
+            IList<Champion> liste = new List<Champion>();
+            foreach (var champion in champions)
+            {
+                liste.Add(ToChampion(champion));
+            }
+            return liste;
+        }
     }
 }

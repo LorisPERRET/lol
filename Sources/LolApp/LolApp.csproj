@@ -82,6 +82,7 @@
 	  <MauiImage Include="Resources\Images\assassin.svg" />
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\ClientAPI\ClientAPI.csproj" />
 	  <ProjectReference Include="..\Model\Model.csproj" />
 	  <ProjectReference Include="..\Shared\Shared.csproj" />
 	  <ProjectReference Include="..\StubLib\StubLib.csproj" />

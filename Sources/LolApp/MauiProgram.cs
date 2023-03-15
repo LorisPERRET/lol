@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui;
+﻿using ClientAPI;
+using CommunityToolkit.Maui;
 using LolApp.ViewModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Handlers;
@@ -23,7 +24,7 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 				fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");
 			});
-		builder.Services.AddSingleton<IDataManager, StubData>()
+		builder.Services.AddSingleton<IDataManager, API>()
 						.AddTransient<ApplicationVM>()
 						.AddTransient<ChampionsPage>();
 
