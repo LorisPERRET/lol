@@ -19,7 +19,7 @@ namespace DTO_EF
 
         public float Price { get; set; }
 
-        public string Image { get; set; }
+        public ImageEntity Image { get; set; }
 
         public ChampionEntity Champion { get; set; }
 

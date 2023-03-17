@@ -17,8 +17,6 @@ namespace DTO_EF.Mapper
                 Description = skin.Description,
                 Icon = skin.Icon,
                 Price = skin.Price,
-                Image = skin.Image.Base64,
-                Champion = skin.Champion.ToEntity(),
             };
         }
 

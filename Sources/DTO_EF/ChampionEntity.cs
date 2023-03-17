@@ -18,8 +18,10 @@ namespace DTO_EF
 
         public string Class { get; set; }
 
-        public string Image { get; set; }
+        public ImageEntity Image { get; set; }
 
         public ICollection<SkinEntity> Skins { get; set; } = new List<SkinEntity>();
+
+        public ICollection<RunePageEntity> RunePages { get; set; } = new List<RunePageEntity>();
     }
 }

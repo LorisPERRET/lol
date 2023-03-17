@@ -17,6 +17,8 @@ namespace DTO_EF
 
         public string Familly { get; set; }
 
-        public string Image { get; set; }
+        public ImageEntity Image { get; set; }
+
+        public ICollection<RunePageEntity> RunePages { get; set; } = new List<RunePageEntity>();
     }
 }

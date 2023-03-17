@@ -17,7 +17,6 @@ namespace DTO_EF.Mapper
                 Name = rune.Name,
                 Description = rune.Description,
                 Familly = rune.Family.ToString(),
-                Image = rune.Image.Base64
             };
         }
 

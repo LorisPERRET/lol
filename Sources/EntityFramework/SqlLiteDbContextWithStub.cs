@@ -3,12 +3,6 @@ using DTO_EF.Mapper;
 using Microsoft.EntityFrameworkCore;
 using Model;
 using StubLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Rune = Model.Rune;
 
 namespace EntityFramework
 {
@@ -18,25 +12,58 @@ namespace EntityFramework
         {
             base.OnModelCreating(modelBuilder);
 
-            var championAkali = new ChampionEntity { Name = "Akali", Bio = "", Icon = "", Class = ChampionClass.Assassin.ToString(), Image = "" };
-            var championAatrox = new ChampionEntity { Name = "Aatrox", Bio = "", Icon = "", Class = ChampionClass.Fighter.ToString(), Image = "" };
+            var stub = new StubData();
+            var championList = await stub.ChampionsMgr.GetItems(0, await stub.ChampionsMgr.GetNbItems());
+            int imageId = 1;
+            int id = 1;
 
-            modelBuilder.Entity<ChampionEntity>().HasData(championAkali, championAatrox );
+            foreach (var champion in championList.ToList())
+            {
+                var image = new ImageEntity { Id = imageId, base64 = champion.Image.Base64 };
+                modelBuilder.Entity<ImageEntity>().HasData(image);
+                modelBuilder.Entity<ChampionEntity>().HasData(
+                    new { champion.Name, champion.Bio, champion.Icon, Class = champion.Class.ToString(), ImageId = image.Id }
+                );
+                imageId++;
+            }
 
-            modelBuilder.Entity<SkinEntity>().HasData(
-                new { Id = 1, Name = "Stinger", Description = "", Icon= "", Image = "", ChampionForeignKey = "Akali", Price = 0f },
-                new { Id = 2, Name = "Infernal", Description = "", Icon = "", Image = "", ChampionForeignKey = "Akali", Price = 0f },
-                new { Id = 3, Name = "All-Star", Description = "", Icon = "", Image = "", ChampionForeignKey = "Akali", Price = 0f },
-                new { Id = 4, Name = "Justicar", Description = "", Icon = "", Image = "", ChampionForeignKey = "Aatrox", Price = 0f },
-                new { Id = 5, Name = "Mecha", Description = "", Icon = "", Image = "", ChampionForeignKey = "Aatrox", Price = 0f },
-                new { Id = 6, Name = "Sea Hunter", Description = "", Icon = "", Image = "", ChampionForeignKey = "Aatrox", Price = 0f }
-            );
 
-            modelBuilder.Entity<RuneEntity>().HasData(
-                new RuneEntity { Id = 1, Name = "Conqueror", Familly = RuneFamily.Precision.ToString(), Description = "", Image = "" },
-                new RuneEntity { Id = 2, Name = "Legend: Alacrity", Familly = RuneFamily.Precision.ToString(), Description = "", Image = "" },
-                new RuneEntity { Id = 3, Name = "last stand 2", Familly = RuneFamily.Domination.ToString(), Description = "", Image = "" }
-            );
+            var skinList = await stub.SkinsMgr.GetItems(0, await stub.SkinsMgr.GetNbItems());
+
+            foreach (var skin in skinList.ToList())
+            {
+                var image = new ImageEntity { Id = imageId, base64 = skin.Image.Base64 };
+                modelBuilder.Entity<ImageEntity>().HasData(image);
+                modelBuilder.Entity<SkinEntity>().HasData(
+                    new { Id = id, skin.Name, skin.Description, skin.Icon, ImageId = image.Id, ChampionName = skin.Champion.Name, skin.Price }
+                );
+                imageId++;
+                id++;
+            }
+
+            var runeList = await stub.RunesMgr.GetItems(0, await stub.SkinsMgr.GetNbItems());
+            id = 1;
+            foreach (var rune in runeList.ToList())
+            {
+                var image = new ImageEntity { Id = imageId, base64 = rune.Image.Base64 };
+                modelBuilder.Entity<ImageEntity>().HasData(image);
+                modelBuilder.Entity<RuneEntity>().HasData(
+                    new { Id = id, rune.Name, Familly = rune.Family.ToString(), rune.Description, ImageId = image.Id }
+                );
+                imageId++;
+                id++;
+            }
+
+            var runePageList = await stub.RunePagesMgr.GetItems(0, await stub.RunePagesMgr.GetNbItems());
+            id = 1;
+
+            foreach (var runePage in runePageList.ToList())
+            {
+                modelBuilder.Entity<RunePageEntity>().HasData(
+                    new { Id = id, runePage.Name }
+                );
+                id++;
+            }
         }
     }
 }

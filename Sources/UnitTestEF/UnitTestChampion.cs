@@ -21,7 +21,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
 
             using (var context = new SqlLiteDbContext(options))
             {
@@ -51,7 +51,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
 
             using (var context = new SqlLiteDbContext(options))
             {
@@ -82,7 +82,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
             List<ChampionEntity> lesChampions;
 
             using (var context = new SqlLiteDbContext(options))
@@ -112,7 +112,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
             List<ChampionEntity> lesChampions;
 
             using (var context = new SqlLiteDbContext(options))
@@ -142,7 +142,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" , Image = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" , Image = new ImageEntity { base64 = "" } };
             int nbChampions = 0;
             using (var context = new SqlLiteDbContext(options))
             {
@@ -171,7 +171,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" , Image = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" , Image = new ImageEntity { base64 = "" } };
             int nbChampion = 0;
             using (var context = new SqlLiteDbContext(options))
             {
@@ -201,7 +201,7 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" , Image = "" };
+            ChampionEntity item = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "" , Image = new ImageEntity { base64 = "" } };
             List<ChampionEntity> lesChampions;
 
             using (var context = new SqlLiteDbContext(options))

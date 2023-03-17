@@ -23,7 +23,8 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = "", Price = 0f };
+            ChampionEntity itemChampion = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
+            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = new ImageEntity { base64 = "" }, Price = 0f, Champion = itemChampion };
 
             using (var context = new SqlLiteDbContext(options))
             {
@@ -53,7 +54,8 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = "", Price = 0f };
+            ChampionEntity itemChampion = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
+            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = new ImageEntity { base64 = "" }, Price = 0f, Champion = itemChampion };
 
             using (var context = new SqlLiteDbContext(options))
             {
@@ -84,7 +86,8 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = "", Price = 0f };
+            ChampionEntity itemChampion = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
+            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = new ImageEntity { base64 = "" }, Price = 0f, Champion = itemChampion }; 
             List<SkinEntity> lesSkins;
 
             using (var context = new SqlLiteDbContext(options))
@@ -114,7 +117,9 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = "", Price = 0f };
+
+            ChampionEntity itemChampion = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
+            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = new ImageEntity { base64 = "" }, Price = 0f, Champion = itemChampion }; 
             List<SkinEntity> lesSkins;
 
             using (var context = new SqlLiteDbContext(options))
@@ -144,7 +149,9 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = "", Price = 0f };
+
+            ChampionEntity itemChampion = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
+            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = new ImageEntity { base64 = "" }, Price = 0f, Champion = itemChampion }; 
             int nbSkins = 0;
             using (var context = new SqlLiteDbContext(options))
             {
@@ -173,7 +180,9 @@ namespace UnitTestEF
                                 .Options;
 
             //Arange
-            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = "", Price = 0f };
+
+            ChampionEntity itemChampion = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
+            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = new ImageEntity { base64 = "" }, Price = 0f, Champion = itemChampion };
             int nbSkins = 0;
             using (var context = new SqlLiteDbContext(options))
             {
@@ -203,7 +212,9 @@ namespace UnitTestEF
                                 .Options;
 
             //Arang
-            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = "", Price = 0f };
+
+            ChampionEntity itemChampion = new ChampionEntity { Name = "Blabla", Bio = "", Class = "Tank", Icon = "", Image = new ImageEntity { base64 = "" } };
+            SkinEntity item = new SkinEntity { Name = "Stinger", Description = "", Icon = "", Image = new ImageEntity { base64 = "" }, Price = 0f, Champion = itemChampion }; 
             List<SkinEntity> lesSkins;
 
             using (var context = new SqlLiteDbContext(options))
