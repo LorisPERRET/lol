@@ -1,9 +1,12 @@
 ﻿using DTO_API;
 using DTO_API.Mapper;
+using DTO_API.Pagination;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,9 +43,10 @@ namespace ClientAPI
 
         public async Task<IEnumerable<Champion?>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            //var res = await _httpClient.GetAsync($"");
-            throw new NotImplementedException();
-
+            int page = index / count;
+            string query = String.Format($"/Champions?page={0}&offset={1}&championClass={2}&orderingPropertyName={3}&descending={4}",page,count,null,orderingPropertyName,descending);
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>(query);
+            return res.Items.ToChampions();
         }
 
         public Task<IEnumerable<Champion?>> GetItemsByCharacteristic(string charName, int index, int count, string? orderingPropertyName = null, bool descending = false)
@@ -50,14 +54,19 @@ namespace ClientAPI
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Champion?>> GetItemsByClass(ChampionClass championClass, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Champion?>> GetItemsByClass(ChampionClass championClass, int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            throw new NotImplementedException();
+            int page = index / count;
+            string query = String.Format($"/Champions?page={0}&offset={1}&championClass={2}&orderingPropertyName={3}&descending={4}", page, count, championClass.ToString(), orderingPropertyName, descending);
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>(query);
+            return res.Items.ToChampions();
         }
 
-        public Task<IEnumerable<Champion?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Champion?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            throw new NotImplementedException();
+            string query = String.Format($"/Champions/{0}",substring);
+            var res = await _httpClient.GetFromJsonAsync<ChampionDto>(query);
+            return new List<Champion> { res.ToChampion() };
         }
 
         public Task<IEnumerable<Champion?>> GetItemsByRunePage(RunePage? runePage, int index, int count, string? orderingPropertyName = null, bool descending = false)
@@ -75,9 +84,10 @@ namespace ClientAPI
             throw new NotImplementedException();
         }
 
-        public Task<int> GetNbItems()
-        {
-            throw new NotImplementedException();
+        public async Task<int> GetNbItems()
+        { 
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>($"/Champions");
+            return res.NbItem;
         }
 
         public Task<int> GetNbItemsByCharacteristic(string charName)
@@ -85,14 +95,18 @@ namespace ClientAPI
             throw new NotImplementedException();
         }
 
-        public Task<int> GetNbItemsByClass(ChampionClass championClass)
+        public async Task<int> GetNbItemsByClass(ChampionClass championClass)
         {
-            throw new NotImplementedException();
+            string query = String.Format($"/Champions?championClass={0}", championClass.ToString());
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>(query);
+            return res.NbItem;
         }
 
-        public Task<int> GetNbItemsByName(string substring)
+        public async Task<int> GetNbItemsByName(string substring)
         {
-            throw new NotImplementedException();
+            string query = String.Format($"/Champions/{0}", substring);
+            var res = await _httpClient.GetFromJsonAsync<ChampionDto>(query);
+            return res is null ? 0 : 1;
         }
 
         public Task<int> GetNbItemsByRunePage(RunePage? runePage)
