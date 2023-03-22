@@ -31,5 +31,10 @@ namespace DTO_API.Mapper
         {
             return new Skin(skin.Name, skin.Champion.ToChampion(), skin.Price, skin.Icon, skin.Image.Base64, skin.Description);
         }
+
+        public static IEnumerable<Skin> ToSkins(this IEnumerable<SkinDto> skins)
+        {
+            return skins.Select(s => ToSkin(s));
+        }
     }
 }

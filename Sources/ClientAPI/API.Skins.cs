@@ -1,9 +1,14 @@
-﻿using Model;
+﻿using DTO_API.Mapper;
+using DTO_API;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using DTO_API.Pagination;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ClientAPI
 {
@@ -16,49 +21,70 @@ namespace ClientAPI
             _httpClient = httpClient;
         }
 
-        public Task<Skin?> AddItem(Skin? item)
+        public async Task<Skin?> AddItem(Skin? item)
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.PostAsJsonAsync<SkinDto>("/api/Skins", item.ToDto());
+            if (res.StatusCode == System.Net.HttpStatusCode.Created)
+            {
+                return (await res.Content.ReadFromJsonAsync<SkinDto>()).ToSkin();
+            }
+            else throw new HttpRequestException();
         }
 
-        public Task<bool> DeleteItem(Skin? item)
+        public async Task<bool> DeleteItem(Skin? item)
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.DeleteAsync($"/api/Skins/{item.Name}");
+            if (res.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+            else return false;
         }
 
-        public Task<IEnumerable<Skin?>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Skin?>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<SkinDto>>>($"/api/Skins?page={index}&offset={count}&orderingPropertyName={orderingPropertyName}&descending={descending}");
+            return res.Items.ToSkins();
         }
 
-        public Task<IEnumerable<Skin?>> GetItemsByChampion(Champion? champion, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Skin?>> GetItemsByChampion(Champion? champion, int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<SkinDto>>>($"/api/Champions/{champion.Name}/skins?page={index}&offset={count}&orderingPropertyName={orderingPropertyName}&descending={descending}");
+            return res.Items.ToSkins();
         }
 
-        public Task<IEnumerable<Skin?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Skin?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.GetFromJsonAsync<SkinDto>($"/api/Skins/{substring}");
+            return new List<Skin> { res.ToSkin() };
         }
 
-        public Task<int> GetNbItems()
+        public async Task<int> GetNbItems()
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<SkinDto>>>($"/api/Skins");
+            return res.NbItem;
         }
 
-        public Task<int> GetNbItemsByChampion(Champion? champion)
+        public async Task<int> GetNbItemsByChampion(Champion? champion)
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<SkinDto>>>($"/api/Champions/{champion.Name}/skins");
+            return res.NbItem;
         }
 
-        public Task<int> GetNbItemsByName(string substring)
+        public async Task<int> GetNbItemsByName(string substring)
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.GetFromJsonAsync<SkinDto>($"/api/Skin/{substring}");
+            return res is null ? 0 : 1;
         }
 
-        public Task<Skin?> UpdateItem(Skin? oldItem, Skin? newItem)
+        public async Task<Skin?> UpdateItem(Skin? oldItem, Skin? newItem)
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.PutAsJsonAsync<SkinDto>($"/api/Skins/{oldItem.Name}", newItem.ToDto());
+            if (res.StatusCode == System.Net.HttpStatusCode.Created)
+            {
+                return (await res.Content.ReadFromJsonAsync<SkinDto>()).ToSkin();
+            }
+            else throw new HttpRequestException();
         }
     }
 }

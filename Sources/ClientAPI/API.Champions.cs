@@ -124,9 +124,15 @@ namespace ClientAPI
             throw new NotImplementedException();
         }
 
-        public Task<Champion?> UpdateItem(Champion? oldItem, Champion? newItem)
+        public async Task<Champion?> UpdateItem(Champion? oldItem, Champion? newItem)
         {
-            throw new NotImplementedException();
+            string query = String.Format($"/Champions/{0}", oldItem.Name);
+            var res = await _httpClient.PutAsJsonAsync<ChampionDto>(query, newItem.ToDto());
+            if (res.StatusCode == System.Net.HttpStatusCode.Created)
+            {
+                return (await res.Content.ReadFromJsonAsync<ChampionDto>()).ToChampion();
+            }
+            else throw new HttpRequestException();
         }
     }
 
