@@ -44,8 +44,6 @@ namespace ClientAPI
 
         public async Task<IEnumerable<Champion?>> GetItems(int index, int count, string? orderingPropertyName = "", bool descending = false)
         {
-            //Debug.WriteLine(orderingPropertyName);
-            //Debug.WriteLine($"/api/Champions?page={index}&offset={count}&orderingPropertyName={orderingPropertyName}&descending={descending}");
             var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>($"/api/Champions?page={index}&offset={count}&orderingPropertyName={orderingPropertyName}&descending={descending}");
             return res.Items.ToChampions();
         }
@@ -55,19 +53,23 @@ namespace ClientAPI
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Champion?>> GetItemsByClass(ChampionClass championClass, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Champion?>> GetItemsByClass(ChampionClass championClass, int index, int count, string? orderingPropertyName = "", bool descending = false)
         {
-            int page = index / count;
-            string query = String.Format($"/api/Champions?page={0}&offset={1}&championClass={2}&orderingPropertyName={3}&descending={4}", page, count, championClass.ToString(), orderingPropertyName, descending);
-            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>(query);
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>($"/api/Champions?page={index}&offset={count}&championClass={championClass}&orderingPropertyName={orderingPropertyName}&descending={descending}");
             return res.Items.ToChampions();
         }
 
-        public async Task<IEnumerable<Champion?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        // Etant donné que le nom d'un champion est unique : cette méthode est utilisé pour récupérer une seul champion et son image
+        public async Task<IEnumerable<Champion?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = "", bool descending = false)
         {
-            string query = String.Format($"/api/Champions/{0}",substring);
-            var res = await _httpClient.GetFromJsonAsync<ChampionDto>(query);
-            return new List<Champion> { res.ToChampion() };
+            var res = await _httpClient.GetFromJsonAsync<ChampionDto>($"/api/Champions/{substring}");
+            var champion = res.ToChampion();
+
+            // Récupération de l'image séparée afin de réduire le coût
+            var image = await _httpClient.GetFromJsonAsync<LargeImageDto>($"/api/Champions/{substring}/image");
+            champion.Image = image.ToLargeImage();
+
+            return new List<Champion> { champion };
         }
 
         public Task<IEnumerable<Champion?>> GetItemsByRunePage(RunePage? runePage, int index, int count, string? orderingPropertyName = null, bool descending = false)
@@ -98,15 +100,13 @@ namespace ClientAPI
 
         public async Task<int> GetNbItemsByClass(ChampionClass championClass)
         {
-            string query = String.Format($"/api/Champions?championClass={0}", championClass.ToString());
-            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>(query);
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>($"/api/Champions?championClass={championClass}");
             return res.NbItem;
         }
 
         public async Task<int> GetNbItemsByName(string substring)
         {
-            string query = String.Format($"/Champions/{0}", substring);
-            var res = await _httpClient.GetFromJsonAsync<ChampionDto>(query);
+            var res = await _httpClient.GetFromJsonAsync<ChampionDto>($"/Champions/{substring}");
             return res is null ? 0 : 1;
         }
 
@@ -127,8 +127,7 @@ namespace ClientAPI
 
         public async Task<Champion?> UpdateItem(Champion? oldItem, Champion? newItem)
         {
-            string query = String.Format($"/Champions/{0}", oldItem.Name);
-            var res = await _httpClient.PutAsJsonAsync<ChampionDto>(query, newItem.ToDto());
+            var res = await _httpClient.PutAsJsonAsync<ChampionDto>($"/Champions/{oldItem.Name}", newItem.ToDto());
             if (res.StatusCode == System.Net.HttpStatusCode.Created)
             {
                 return (await res.Content.ReadFromJsonAsync<ChampionDto>()).ToChampion();

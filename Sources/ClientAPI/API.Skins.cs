@@ -41,22 +41,28 @@ namespace ClientAPI
             else return false;
         }
 
-        public async Task<IEnumerable<Skin?>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Skin?>> GetItems(int index, int count, string? orderingPropertyName = "", bool descending = false)
         {
             var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<SkinDto>>>($"/api/Skins?page={index}&offset={count}&orderingPropertyName={orderingPropertyName}&descending={descending}");
             return res.Items.ToSkins();
         }
 
-        public async Task<IEnumerable<Skin?>> GetItemsByChampion(Champion? champion, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Skin?>> GetItemsByChampion(Champion? champion, int index, int count, string? orderingPropertyName = "", bool descending = false)
         {
             var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<SkinDto>>>($"/api/Champions/{champion.Name}/skins?page={index}&offset={count}&orderingPropertyName={orderingPropertyName}&descending={descending}");
             return res.Items.ToSkins();
         }
 
-        public async Task<IEnumerable<Skin?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        // Etant donné que le nom d'un skin est unique : cette méthode est utilisé pour récupérer une seul skin et son image
+        public async Task<IEnumerable<Skin?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = "", bool descending = false)
         {
             var res = await _httpClient.GetFromJsonAsync<SkinDto>($"/api/Skins/{substring}");
-            return new List<Skin> { res.ToSkin() };
+            var skin = res.ToSkin();
+
+            // Récupération de l'image séparée afin de réduire le coût
+            var image = await _httpClient.GetFromJsonAsync<LargeImageDto>($"/api/Skins/{substring}/image");
+            skin.Image = image.ToLargeImage();
+            return new List<Skin> { skin };
         }
 
         public async Task<int> GetNbItems()
