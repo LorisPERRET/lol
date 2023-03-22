@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
@@ -23,7 +24,7 @@ namespace ClientAPI
 
         public async Task<Champion?> AddItem(Champion? item)
         {
-            var res = await _httpClient.PostAsJsonAsync<ChampionDto>("/Champions", item.ToDto());
+            var res = await _httpClient.PostAsJsonAsync<ChampionDto>("/api/Champions", item.ToDto());
             if (res.StatusCode == System.Net.HttpStatusCode.Created)
             {
                 return (await res.Content.ReadFromJsonAsync<ChampionDto>()).ToChampion();
@@ -33,7 +34,7 @@ namespace ClientAPI
 
         public async Task<bool> DeleteItem(Champion? item)
         {
-            var res = await _httpClient.DeleteAsync($"/Champions/{item.Name}");
+            var res = await _httpClient.DeleteAsync($"/api/Champions/{item.Name}");
             if (res.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return true;
@@ -41,11 +42,11 @@ namespace ClientAPI
             else return false;
         }
 
-        public async Task<IEnumerable<Champion?>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Champion?>> GetItems(int index, int count, string? orderingPropertyName = "", bool descending = false)
         {
-            int page = index / count;
-            string query = String.Format($"/Champions?page={0}&offset={1}&championClass={2}&orderingPropertyName={3}&descending={4}",page,count,null,orderingPropertyName,descending);
-            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>(query);
+            //Debug.WriteLine(orderingPropertyName);
+            //Debug.WriteLine($"/api/Champions?page={index}&offset={count}&orderingPropertyName={orderingPropertyName}&descending={descending}");
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>($"/api/Champions?page={index}&offset={count}&orderingPropertyName={orderingPropertyName}&descending={descending}");
             return res.Items.ToChampions();
         }
 
@@ -57,14 +58,14 @@ namespace ClientAPI
         public async Task<IEnumerable<Champion?>> GetItemsByClass(ChampionClass championClass, int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
             int page = index / count;
-            string query = String.Format($"/Champions?page={0}&offset={1}&championClass={2}&orderingPropertyName={3}&descending={4}", page, count, championClass.ToString(), orderingPropertyName, descending);
+            string query = String.Format($"/api/Champions?page={0}&offset={1}&championClass={2}&orderingPropertyName={3}&descending={4}", page, count, championClass.ToString(), orderingPropertyName, descending);
             var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>(query);
             return res.Items.ToChampions();
         }
 
         public async Task<IEnumerable<Champion?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            string query = String.Format($"/Champions/{0}",substring);
+            string query = String.Format($"/api/Champions/{0}",substring);
             var res = await _httpClient.GetFromJsonAsync<ChampionDto>(query);
             return new List<Champion> { res.ToChampion() };
         }
@@ -86,7 +87,7 @@ namespace ClientAPI
 
         public async Task<int> GetNbItems()
         { 
-            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>($"/Champions");
+            var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>($"/api/Champions");
             return res.NbItem;
         }
 
@@ -97,7 +98,7 @@ namespace ClientAPI
 
         public async Task<int> GetNbItemsByClass(ChampionClass championClass)
         {
-            string query = String.Format($"/Champions?championClass={0}", championClass.ToString());
+            string query = String.Format($"/api/Champions?championClass={0}", championClass.ToString());
             var res = await _httpClient.GetFromJsonAsync<Page<IEnumerable<ChampionDto>>>(query);
             return res.NbItem;
         }
