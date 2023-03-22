@@ -55,10 +55,7 @@ namespace API.Controllers
                     return Forbid();
                 }
 
-                //var startIndex = page * offset;
-                //Debug.WriteLine(startIndex.ToString());
-                Debug.WriteLine(offset.ToString());
-                var debug = await _dataManager.ChampionsMgr.GetItems(4, 2, orderingPropertyName, descending);
+
 
                 IEnumerable<Champion> champ = championClass is null ? await _dataManager.ChampionsMgr.GetItems(page, offset, orderingPropertyName, descending) : await _dataManager.ChampionsMgr.GetItemsByClass(Enum.Parse<ChampionClass>(championClass), page, offset, orderingPropertyName, descending);
                 if (champ.Count() == 0)
@@ -147,8 +144,8 @@ namespace API.Controllers
                     return Forbid();
                 }
 
-                var startIndex = page * offset;
-                IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItemsByChampion(champion, startIndex, offset, orderingPropertyName, descending);
+
+                IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItemsByChampion(champion, page, offset, orderingPropertyName, descending);
 
                 return Ok(new Page<IEnumerable<SkinDto>>(nbItem, offset, skins.ToDtos()));
 
