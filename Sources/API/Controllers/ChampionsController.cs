@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Model;
 using StubLib;
 using System;
+using System.Diagnostics;
 using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -54,9 +55,12 @@ namespace API.Controllers
                     return Forbid();
                 }
 
-                var startIndex = page * offset;
+                //var startIndex = page * offset;
+                //Debug.WriteLine(startIndex.ToString());
+                Debug.WriteLine(offset.ToString());
+                var debug = await _dataManager.ChampionsMgr.GetItems(4, 2, orderingPropertyName, descending);
 
-                IEnumerable<Champion> champ = championClass is null ? await _dataManager.ChampionsMgr.GetItems(startIndex, offset, orderingPropertyName, descending) : await _dataManager.ChampionsMgr.GetItemsByClass(Enum.Parse<ChampionClass>(championClass), startIndex, offset, orderingPropertyName, descending);
+                IEnumerable<Champion> champ = championClass is null ? await _dataManager.ChampionsMgr.GetItems(page, offset, orderingPropertyName, descending) : await _dataManager.ChampionsMgr.GetItemsByClass(Enum.Parse<ChampionClass>(championClass), page, offset, orderingPropertyName, descending);
                 if (champ.Count() == 0)
                 {
                     _logger.LogInformation("Aucun champion n'a été trouvé");

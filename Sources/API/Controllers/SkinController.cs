@@ -42,8 +42,7 @@ namespace API.Controllers
                     return Forbid();
                 }
 
-                var startIndex = page * offset;
-                IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItems(startIndex, offset, orderingPropertyName, descending);
+                IEnumerable<Skin> skins = await _dataManager.SkinsMgr.GetItems(page, offset, orderingPropertyName, descending);
                 if (skins.Count() == 0)
                 {
                     _logger.LogInformation("Aucun skin n'a été trouvé");
