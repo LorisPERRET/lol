@@ -21,5 +21,15 @@ namespace DTO_EF.Mapper
         {
             return runePage.Select(r => ToEntity(r));
         }
+
+        public static RunePage ToRunePage(this RunePageEntity runePage)
+        {
+            return new RunePage(runePage.Name);
+        }
+
+        public static IEnumerable<RunePage> ToRunePages(this IEnumerable<RunePageEntity> runePage)
+        {
+            return runePage.Select(r => ToRunePage(r));
+        }
     }
 }

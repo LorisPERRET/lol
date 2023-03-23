@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DTO_EF;
+using DTO_EF.Mapper;
+using EntityFramework;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -10,26 +14,57 @@ namespace ClientDb
 {
     public class BDDChampions : IChampionsManager
     {
-        public DbContext _dbContext { get; }
+        public SqlLiteDbContext _dbContext { get; }
 
-        public BDDChampions(DbContext dbContext)
+        public BDDChampions(SqlLiteDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public Task<Champion?> AddItem(Champion? item)
+        public async Task<Champion?> AddItem(Champion? item)
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+
+                var res = await context.Champions.AddAsync(item.ToEntity());
+                context.SaveChanges();
+
+                return res.Entity.ToChampion();
+            }
         }
 
-        public Task<bool> DeleteItem(Champion? item)
+        public async Task<bool> DeleteItem(Champion? item)
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+                
+                var res = context.Champions.Remove(item.ToEntity());
+                context.SaveChanges();
+
+                return (res != null);
+            }
         }
 
-        public Task<IEnumerable<Champion?>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Champion?>> GetItems(int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+
+                IEnumerable<ChampionEntity> temp = context.Champions.ToList();
+                if (orderingPropertyName != null)
+                {
+                    var prop = typeof(ChampionEntity).GetProperty(orderingPropertyName!);
+                    if (prop != null)
+                    {
+                        temp = descending ? temp.OrderByDescending(item => prop.GetValue(item))
+                                            : temp.OrderBy(item => prop.GetValue(item));
+                    }
+                }
+                return temp.Skip(index * count).Take(count).ToChampions();
+            }
         }
 
         public Task<IEnumerable<Champion?>> GetItemsByCharacteristic(string charName, int index, int count, string? orderingPropertyName = null, bool descending = false)
@@ -37,19 +72,67 @@ namespace ClientDb
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Champion?>> GetItemsByClass(ChampionClass championClass, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Champion?>> GetItemsByClass(ChampionClass championClass, int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+
+                IEnumerable<ChampionEntity> temp = context.Champions.ToList();
+                temp = temp.Where(item => item.Class == championClass.ToString());
+                if (orderingPropertyName != null)
+                {
+                    var prop = typeof(Champion).GetProperty(orderingPropertyName!);
+                    if (prop != null)
+                    {
+                        temp = descending ? temp.OrderByDescending(item => prop.GetValue(item))
+                                            : temp.OrderBy(item => prop.GetValue(item));
+                    }
+                }
+                return temp.Skip(index * count).Take(count).ToChampions();
+            }
         }
 
-        public Task<IEnumerable<Champion?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Champion?>> GetItemsByName(string substring, int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+
+                IEnumerable<ChampionEntity> temp = context.Champions.ToList();
+                temp = temp.Where(item => item.Name == substring);
+                if (orderingPropertyName != null)
+                {
+                    var prop = typeof(ChampionEntity).GetProperty(orderingPropertyName!);
+                    if (prop != null)
+                    {
+                        temp = descending ? temp.OrderByDescending(item => prop.GetValue(item))
+                                            : temp.OrderBy(item => prop.GetValue(item));
+                    }
+                }
+                return temp.Skip(index * count).Take(count).ToChampions();
+            }
         }
 
-        public Task<IEnumerable<Champion?>> GetItemsByRunePage(RunePage? runePage, int index, int count, string? orderingPropertyName = null, bool descending = false)
+        public async Task<IEnumerable<Champion?>> GetItemsByRunePage(RunePage? runePage, int index, int count, string? orderingPropertyName = null, bool descending = false)
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+
+                IEnumerable<ChampionEntity> temp = context.Champions.ToList();
+                temp = temp.Where(item => item.RunePages.Contains(runePage.ToEntity()));
+                if (orderingPropertyName != null)
+                {
+                    var prop = typeof(Champion).GetProperty(orderingPropertyName!);
+                    if (prop != null)
+                    {
+                        temp = descending ? temp.OrderByDescending(item => prop.GetValue(item))
+                                            : temp.OrderBy(item => prop.GetValue(item));
+                    }
+                }
+                return temp.Skip(index * count).Take(count).ToChampions();
+            }
         }
 
         public Task<IEnumerable<Champion?>> GetItemsBySkill(Skill? skill, int index, int count, string? orderingPropertyName = null, bool descending = false)
@@ -62,9 +145,14 @@ namespace ClientDb
             throw new NotImplementedException();
         }
 
-        public Task<int> GetNbItems()
+        public async Task<int> GetNbItems()
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+
+                return await context.Champions.CountAsync();
+            }
         }
 
         public Task<int> GetNbItemsByCharacteristic(string charName)
@@ -72,19 +160,34 @@ namespace ClientDb
             throw new NotImplementedException();
         }
 
-        public Task<int> GetNbItemsByClass(ChampionClass championClass)
+        public async Task<int> GetNbItemsByClass(ChampionClass championClass)
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+
+                return await context.Champions.Where(item => item.Class == championClass.ToString()).CountAsync();
+            }
         }
 
-        public Task<int> GetNbItemsByName(string substring)
+        public async Task<int> GetNbItemsByName(string substring)
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+
+                return await context.Champions.Where(item => item.Name == substring ).CountAsync();
+            }
         }
 
-        public Task<int> GetNbItemsByRunePage(RunePage? runePage)
+        public async Task<int> GetNbItemsByRunePage(RunePage? runePage)
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+
+                return await context.Champions.Where(item => item.RunePages.Contains(runePage.ToEntity())).CountAsync();
+            }
         }
 
         public Task<int> GetNbItemsBySkill(Skill? skill)
@@ -97,9 +200,23 @@ namespace ClientDb
             throw new NotImplementedException();
         }
 
-        public Task<Champion?> UpdateItem(Champion? oldItem, Champion? newItem)
+        public async Task<Champion?> UpdateItem(Champion? oldItem, Champion? newItem)
         {
-            throw new NotImplementedException();
+            using (var context = _dbContext)
+            {
+                context.Database.EnsureCreated();
+
+                if (oldItem == null) return null;
+                if (newItem == null) return null;
+
+                var champ = context.Champions.Where(item => item.Name == oldItem.Name);
+                if (champ.Count() > 1 || champ.Count() == 0 ) return null;
+
+                var res = context.Update(newItem);
+                          
+                context.SaveChanges();
+                return res.Entity;
+            }
         }
     }
 }

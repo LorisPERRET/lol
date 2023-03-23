@@ -24,5 +24,15 @@ namespace DTO_EF.Mapper
         {
             return rune.Select(r => ToEntity(r));
         }
+
+        public static Rune ToRune(this RuneEntity rune)
+        {
+            return new Rune(rune.Name, Enum.Parse<RuneFamily>(rune.Familly), "", rune.Image.base64, rune.Description);
+        }
+
+        public static IEnumerable<Rune> ToRunes(this IEnumerable<RuneEntity> rune)
+        {
+            return rune.Select(r => ToRune(r));
+        }
     }
 }
