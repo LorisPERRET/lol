@@ -54,7 +54,7 @@ De plus une Rune est présente dans plusieurs RunePage et une RunePage dispose d
 Voici un Modèle Logique de notre base.
 
 <p align="center"> 
-    <img src="Assets/MLD.svg" alt="MLD" height="200">  
+    <img src="Assets/MLD.png" alt="MLD" height="200">  
 </p>
 
 ## Diagramme de classes du modèle
