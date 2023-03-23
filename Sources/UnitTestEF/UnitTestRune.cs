@@ -136,6 +136,36 @@ namespace UnitTestEF
         }
 
         [TestMethod]
+        public async Task TestGetRunesByFamilly()
+        {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            var options = new DbContextOptionsBuilder<SqlLiteDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
+
+            //Arange
+            RuneEntity item = new RuneEntity { Name = "Stinger", Description = "", Image = new ImageEntity { base64 = "" }, Familly = RuneFamily.Precision.ToString() };
+            List<RuneEntity> lesRunes;
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                await context.Runes.AddAsync(item);
+                context.SaveChanges();
+                Assert.AreEqual(context.Runes.Count(), 1);
+                //Act
+                lesRunes = context.Runes.Where(c => c.Familly == item.Familly).ToList();
+            }
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                //Assert
+                Assert.AreEqual(lesRunes.Count(), 1);
+            }
+        }
+
+        [TestMethod]
         public async Task TestGetNbRunes()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
@@ -184,6 +214,36 @@ namespace UnitTestEF
                 Assert.AreEqual(context.Runes.Count(), 1);
                 //Act
                 nbRunes = await context.Runes.Where(c => c.Name == item.Name).CountAsync();
+            }
+
+            using (var context = new SqlLiteDbContext(options))
+            {
+                //Assert
+
+                Assert.AreEqual(nbRunes, 1);
+            }
+        }
+
+        [TestMethod]
+        public async Task TestGetNbRunesByFamilly()
+        {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            var options = new DbContextOptionsBuilder<SqlLiteDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
+
+            //Arange
+            RuneEntity item = new RuneEntity { Name = "Stinger", Description = "", Image = new ImageEntity { base64 = "" }, Familly = RuneFamily.Precision.ToString() };
+            int nbRunes = 0;
+            using (var context = new SqlLiteDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                await context.Runes.AddAsync(item);
+                context.SaveChanges();
+                Assert.AreEqual(context.Runes.Count(), 1);
+                //Act
+                nbRunes = await context.Runes.Where(c => c.Familly == item.Familly).CountAsync();
             }
 
             using (var context = new SqlLiteDbContext(options))
