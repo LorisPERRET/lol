@@ -1,4 +1,61 @@
-# prepaLoL
+# League of Legend
+
+## Installation du projet
+
+- Clonez le dépot à l'aide de la commande `git clone https://codefirst.iut.uca.fr/git/hugo.livet/lol.git`
+- Ouvrez le projet dans Visual Studio
+- Restaurez les packages NuGet en utilisant la commande `dotnet restore` dans le terminal ou en utilisant l'interface graphique de Visual Studio
+- Compilez le projet en utilisant la commande `dotnet build` ou en utilisant l'interface graphique de Visual Studio
+
+## Web API
+
+Executez notre Web API avec la branche `master` sélectionnée.
+
+### Informations :
+
+Nos entités sont identifiées par leur nom.
+Nous avons pris le choix de séparer l'image et le champion pour gagner en performance. Nous appellons l'image que lorsque nous en avons besoin.
+
+L'API fournit les routes suivants :
+
+Gestion des Champions : 
+- `/api/Champions` (GET) : Récupération de tous les champions
+- `/api/Champions/{nom}` (GET) : Récupération d'un champion grâce à son nom
+- `/api/Champions/{nom}/image` (GET) : Récupération de l'image d'un champion grâce au nom du chapion
+- `/api/Champions/{nom}/skins` (GET) : Récupération des skins d'un champion grâce au nom du champion
+- `/api/Champions` (POST) : Ajout d'un champion
+- `/api/Champions/{nom}` (PUT) : Modification d'un champion grâce à son nom
+- `/api/Champions/{nom}` (DELETE) : Suppression d'un champion grâce à son nom
+
+Gestion des Skins :
+- `/api/Skins` (GET) : Récupération de tous les skins
+- `/api/Skins/{nom}` (GET) : Récupération d'un skin grâce à son nom
+- `/api/Skins/{nom}/image` (GET) : Récupération de l'image d'un skin grâce au nom du chapion
+- `/api/Skins` (POST) : Ajout d'un skin
+- `/api/Skins/{nom}` (PUT) : Modification d'un skin grâce à son nom
+- `/api/Skins/{nom}` (DELETE) : Suppression d'un skin grâce à son nom
+
+## Entity Framework
+
+Nos entités sont identifiées par leur nom.
+Nous avons pris le choix de séparer l'image et le champion pour gagner en performance. Nous appellons l'image que lorsque nous en avons besoin.
+
+Entités présentes dans notre base de données :
+- Champions 
+- Skins
+- Runes
+- RunePages
+- Images
+
+Dans notre base de données, nous disposons de plusieurs relations. Tout d'abord, un champion dispose de plusieurs skin et un skin est lié qu'à un et un seul champion. 
+Ensuite il existe une relation entre champion, rune et runePage. Un champion possède une liste de RunePages et une RunePage peut être possédée par plusieurs champions. 
+De plus une Rune est présente dans plusieurs RunePage et une RunePage dispose de plusieurs Rune. 
+
+Voici un Modèle Logique de notre base.
+
+<p align="center"> 
+    <img src="Assets/MLD.svg" alt="MLD" height="200">  
+</p>
 
 ## Diagramme de classes du modèle
 ```mermaid
