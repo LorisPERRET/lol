@@ -1,5 +1,8 @@
 # League of Legend
 
+Notre projet est un application MAUI développer en C# Utilisant une WebAPI et une base de données Entity Framework
+Vous trouverez une explication de l'architecture de notre projet dans le fichier `Schéma_architecture` dans le dossier `Assets`
+
 ## Installation du projet
 
 - Clonez le dépot à l'aide de la commande `git clone https://codefirst.iut.uca.fr/git/hugo.livet/lol.git`

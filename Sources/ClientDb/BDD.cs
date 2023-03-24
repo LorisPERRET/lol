@@ -6,7 +6,7 @@ namespace ClientDb
 {
     public class BDD : IDataManager
     {
-        private DbContext _dbContext;
+        private SqlLiteDbContext _dbContext;
 
         public IChampionsManager ChampionsMgr { get; }
 
@@ -16,7 +16,7 @@ namespace ClientDb
 
         public IRunePagesManager RunePagesMgr { get; }
 
-        public BDD(DbContext dbContext)
+        public BDD(SqlLiteDbContext dbContext)
         {
             _dbContext = dbContext;
 
