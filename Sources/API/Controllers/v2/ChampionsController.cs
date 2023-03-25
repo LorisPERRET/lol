@@ -3,17 +3,16 @@ using DTO_API.Mapper;
 using DTO_API.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Model;
-using StubLib;
-using System;
-using System.Diagnostics;
 using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace API.Controllers
+namespace API.Controllers.v2
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    //[Route("api/[controller]")]
+    [ApiVersion("2.0")]
     public class ChampionsController : ControllerBase
     {
         private readonly IDataManager _dataManager;
@@ -27,7 +26,7 @@ namespace API.Controllers
 
         // GET: api/<ChampionsController>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]int page = 0, [FromQuery]int offset = 10, [FromQuery]string? championClass = null, [FromQuery] string? orderingPropertyName = null, [FromQuery] bool descending = false)
+        public async Task<IActionResult> Get([FromQuery] int page = 0, [FromQuery] int offset = 10, [FromQuery] string? championClass = null, [FromQuery] string? orderingPropertyName = null, [FromQuery] bool descending = false)
         {
             try
             {
@@ -64,12 +63,13 @@ namespace API.Controllers
                     return NoContent();
                 }
 
-                return Ok(new Page<IEnumerable<ChampionDto>>(nbItem,offset, champ.ToDtos()));
+                return Ok(new Page<IEnumerable<ChampionDto>>(nbItem, offset, champ.ToDtos()));
 
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -86,10 +86,11 @@ namespace API.Controllers
                     return NoContent();
                 }
                 return Ok(champ.Single().ToDto());
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int) HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -109,10 +110,11 @@ namespace API.Controllers
 
                 return Ok(champion.Image.ToDto());
 
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -153,7 +155,7 @@ namespace API.Controllers
             catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -170,10 +172,11 @@ namespace API.Controllers
                 }
                 _logger.LogInformation("Le champion voulu est déja existant");
                 return BadRequest();
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -188,14 +191,15 @@ namespace API.Controllers
                     _logger.LogInformation("Vous ne pouvez pas modifier le nom d'un champion");
                     return BadRequest();
                 }
-                var oldChampion = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0, 
+                var oldChampion = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0,
                                         await _dataManager.ChampionsMgr.GetNbItemsByName(nom));
-                var newChampion = await _dataManager.ChampionsMgr.UpdateItem(oldChampion.FirstOrDefault(),champion.ToChampion());
+                var newChampion = await _dataManager.ChampionsMgr.UpdateItem(oldChampion.FirstOrDefault(), champion.ToChampion());
                 return Ok(newChampion.ToDto());
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -206,7 +210,7 @@ namespace API.Controllers
             try
             {
                 var champ = await _dataManager.ChampionsMgr.GetItemsByName(nom, 0, await _dataManager.ChampionsMgr.GetNbItemsByName(nom));
-            
+
                 bool res = await _dataManager.ChampionsMgr.DeleteItem(champ.FirstOrDefault());
                 if (res)
                 {
@@ -214,10 +218,11 @@ namespace API.Controllers
                 }
                 _logger.LogInformation("Le champion n'a pas été supprimer");
                 return BadRequest();
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
     }

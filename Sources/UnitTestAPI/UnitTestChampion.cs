@@ -1,4 +1,4 @@
-using API.Controllers;
+using API.Controllers.v2;
 using DTO_API;
 using DTO_API.Mapper;
 using DTO_API.Pagination;

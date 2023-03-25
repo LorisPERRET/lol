@@ -1,16 +1,17 @@
 ﻿using DTO_API;
 using DTO_API.Mapper;
 using DTO_API.Pagination;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
-using System;
 using System.Net;
 
-namespace API.Controllers
+namespace API.Controllers.v2
 {
-    [Route("api/[controller]")]
+
     [ApiController]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    //[Route("api/[controller]")]
+    [ApiVersion("2.0")]
     public class SkinController : ControllerBase
     {
         private readonly IDataManager _dataManager;
@@ -51,10 +52,11 @@ namespace API.Controllers
 
                 return Ok(new Page<IEnumerable<SkinDto>>(nbItem, offset, skins.ToDtos()));
 
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -76,7 +78,7 @@ namespace API.Controllers
             catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -100,7 +102,7 @@ namespace API.Controllers
             catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -121,7 +123,7 @@ namespace API.Controllers
             catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -146,7 +148,7 @@ namespace API.Controllers
             catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
 
@@ -169,7 +171,7 @@ namespace API.Controllers
             catch (Exception)
             {
                 _logger.LogWarning("Une erreur est survenue en lien avec le serveur");
-                return StatusCode(((int)HttpStatusCode.InternalServerError), new { message = "Erreur interne du serveur." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Erreur interne du serveur." });
             }
         }
     }
