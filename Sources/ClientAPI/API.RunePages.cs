@@ -10,10 +10,12 @@ namespace ClientAPI
     public class APIRunePages : IRunePagesManager
     {
         public HttpClient _httpClient { get; }
+        public string _baseUri { get; }
 
-        public APIRunePages(HttpClient httpClient)
+        public APIRunePages(HttpClient httpClient, string baseUri)
         {
             _httpClient = httpClient;
+            _baseUri = baseUri;
         }
 
         public Task<RunePage?> AddItem(RunePage? item)

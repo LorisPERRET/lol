@@ -10,10 +10,12 @@ namespace ClientAPI
     public class APIRunes : IRunesManager
     {
         public HttpClient _httpClient { get; }
+        public string _baseUri { get; }
 
-        public APIRunes(HttpClient httpClient)
+        public APIRunes(HttpClient httpClient, string baseUri)
         {
             _httpClient = httpClient;
+            _baseUri = baseUri;
         }
 
         public Task<Model.Rune?> AddItem(Model.Rune? item)
