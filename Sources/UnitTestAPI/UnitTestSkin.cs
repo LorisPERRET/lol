@@ -1,5 +1,4 @@
-﻿using API.Controllers;
-using DTO_API.Pagination;
+﻿using DTO_API.Pagination;
 using DTO_API;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -11,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DTO_API.Mapper;
+using API.Controllers.v2;
 
 namespace UnitTestAPI
 {
