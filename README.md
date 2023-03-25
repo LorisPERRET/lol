@@ -20,23 +20,31 @@ Nos entités sont identifiées par leur nom.
 Nous avons pris le choix de séparer l'image et le champion pour gagner en performance. Nous appellons l'image que lorsque nous en avons besoin.
 
 L'API fournit les routes suivants :
+La differance entre la V1 et la V2 est le nombre de routes et la pagination n'est pas présente dans la V1
 
-Gestion des Champions : 
-- `/api/Champions` (GET) : Récupération de tous les champions
-- `/api/Champions/{nom}` (GET) : Récupération d'un champion grâce à son nom
-- `/api/Champions/{nom}/image` (GET) : Récupération de l'image d'un champion grâce au nom du chapion
-- `/api/Champions/{nom}/skins` (GET) : Récupération des skins d'un champion grâce au nom du champion
-- `/api/Champions` (POST) : Ajout d'un champion
-- `/api/Champions/{nom}` (PUT) : Modification d'un champion grâce à son nom
-- `/api/Champions/{nom}` (DELETE) : Suppression d'un champion grâce à son nom
+Gestion des Champions (V1) : 
+- `/api/v1/Champions` (GET) : Récupération de tous les champions
+- `/api/v1/Champions/{nom}` (GET) : Récupération d'un champion grâce à son nom
+- `/api/v1/Champions` (POST) : Ajout d'un champion
+- `/api/v1/Champions/{nom}` (PUT) : Modification d'un champion grâce à son nom
+- `/api/v1/Champions/{nom}` (DELETE) : Suppression d'un champion grâce à son nom
 
-Gestion des Skins :
-- `/api/Skins` (GET) : Récupération de tous les skins
-- `/api/Skins/{nom}` (GET) : Récupération d'un skin grâce à son nom
-- `/api/Skins/{nom}/image` (GET) : Récupération de l'image d'un skin grâce au nom du chapion
-- `/api/Skins` (POST) : Ajout d'un skin
-- `/api/Skins/{nom}` (PUT) : Modification d'un skin grâce à son nom
-- `/api/Skins/{nom}` (DELETE) : Suppression d'un skin grâce à son nom
+Gestion des Champions (V2) : 
+- `/api/v2/Champions` (GET) : Récupération de tous les champions
+- `/api/v2/Champions/{nom}` (GET) : Récupération d'un champion grâce à son nom
+- `/api/v2/Champions/{nom}/image` (GET) : Récupération de l'image d'un champion grâce au nom du chapion
+- `/api/v2/Champions/{nom}/skins` (GET) : Récupération des skins d'un champion grâce au nom du champion
+- `/api/v2/Champions` (POST) : Ajout d'un champion
+- `/api/v2/Champions/{nom}` (PUT) : Modification d'un champion grâce à son nom
+- `/api/v2/Champions/{nom}` (DELETE) : Suppression d'un champion grâce à son nom
+
+Gestion des Skins (V2) :
+- `/api/v2/Skins` (GET) : Récupération de tous les skins
+- `/api/v2/Skins/{nom}` (GET) : Récupération d'un skin grâce à son nom
+- `/api/v2/Skins/{nom}/image` (GET) : Récupération de l'image d'un skin grâce au nom du chapion
+- `/api/v2/Skins` (POST) : Ajout d'un skin
+- `/api/v2/Skins/{nom}` (PUT) : Modification d'un skin grâce à son nom
+- `/api/v2/Skins/{nom}` (DELETE) : Suppression d'un skin grâce à son nom
 
 ## Entity Framework
 
