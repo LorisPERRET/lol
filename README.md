@@ -46,6 +46,9 @@ Gestion des Skins (V2) :
 - `/api/v2/Skins/{nom}` (PUT) : Modification d'un skin grâce à son nom
 - `/api/v2/Skins/{nom}` (DELETE) : Suppression d'un skin grâce à son nom
 
+Nous avons rencontrer un problème lors de la liaison entre la base de données et l'API ce problème est sur la branche `deploy`.
+Actuelement, l'API (sur `master`) utilise le stub pour retoutner des données.
+
 ## Entity Framework
 
 Nos entités sont identifiées par leur nom.
@@ -67,6 +70,9 @@ Voici un Modèle Logique de notre base.
 <p align="center"> 
     <img src="Assets/MLD.png" alt="MLD" height="200">  
 </p>
+
+Nous avons rencontrer un problème lors de la liaison entre la base de données et l'API ce problème est sur la branche `deploy`.
+Actuelement, l'API (sur `master`) utilise le stub pour retoutner des données.
 
 ## Diagramme de classes du modèle
 ```mermaid
