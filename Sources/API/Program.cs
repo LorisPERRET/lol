@@ -19,7 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 // DataBase
 
 builder.Services.AddDbContext<SqlLiteDbContext>(o => {
-    o.UseSqlite("Name=SqlLiteDb");//Configuration.GetConnectionString("Connectionstring"))
+    o.UseSqlite("Name=SqlLiteDb");//builder.Configuration.GetConnectionString("SqlLiteDb");
 });
 builder.Services.AddScoped<IDataManager, BDD>();
 //builder.Services.AddTransient<IDataManager, BDD>();
