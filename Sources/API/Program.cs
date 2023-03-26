@@ -1,6 +1,9 @@
+using ClientDb;
+using EntityFramework;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Model;
@@ -13,11 +16,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-// Manager choice
-builder.Services.AddSingleton<IDataManager, StubData>();
-builder.Services.AddSingleton<ILogger, Logger<AnyType>>();
+// DataBase
+
+builder.Services.AddDbContext<SqlLiteDbContext>(o => {
+    o.UseSqlite("Name=SqlLiteDb");//Configuration.GetConnectionString("Connectionstring"))
+});
+builder.Services.AddScoped<IDataManager, BDD>();
+//builder.Services.AddTransient<IDataManager, BDD>();
 
 // Logging
+builder.Services.AddSingleton<ILogger, Logger<AnyType>>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 

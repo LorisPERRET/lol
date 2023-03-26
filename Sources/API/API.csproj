@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ClientDb\ClientDb.csproj" />
     <ProjectReference Include="..\DTO\DTO_API.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
     <ProjectReference Include="..\StubLib\StubLib.csproj" />
