@@ -47,7 +47,8 @@ Gestion des Skins (V2) :
 - `/api/v2/Skins/{nom}` (DELETE) : Suppression d'un skin grâce à son nom
 
 Nous avons rencontrer un problème lors de la liaison entre la base de données et l'API ce problème est sur la branche `deploy`.
-Actuelement, l'API (sur `master`) utilise le stub pour retoutner des données.
+Actuellement, l'API (sur `master`) utilise le stub pour retoutner des données.
+Cependant, la liaison entre l'API et l'application est patielement effective (nous n'avons pas implémenté toutes les routes du client mais seulement les principales afin de voir que tout marchait bien).
 
 ## Entity Framework
 
@@ -72,7 +73,7 @@ Voici un Modèle Logique de notre base.
 </p>
 
 Nous avons rencontrer un problème lors de la liaison entre la base de données et l'API ce problème est sur la branche `deploy`.
-Actuelement, l'API (sur `master`) utilise le stub pour retoutner des données.
+Actuellement, l'API (sur `master`) utilise le stub pour retoutner des données.
 
 ## Diagramme de classes du modèle
 ```mermaid
